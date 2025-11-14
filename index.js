@@ -6,8 +6,26 @@ const pino = require('pino');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // serve public.html
 
+// --- Request tracking ---
+const requestTracker = {};
+const COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes
+const MAX_REQUESTS = 10;            // max requests per day
+
+function resetDailyCounters() {
+  const today = new Date().toDateString();
+  for (const number in requestTracker) {
+    if (requestTracker[number].day !== today) {
+      requestTracker[number].count = 0;
+      requestTracker[number].day = today;
+    }
+  }
+}
+// Run reset every hour
+setInterval(resetDailyCounters, 60 * 60 * 1000);
+
+// --- Baileys setup ---
 async function startTrashcore(number) {
   const sessionPath = path.join(__dirname, 'temp', number);
   const { state, saveCreds } = await useMultiFileAuthState(sessionPath);
@@ -29,8 +47,40 @@ async function startTrashcore(number) {
   return { sock, state };
 }
 
+// --- Pairing code logic ---
 async function getPairingCode(phoneNumber) {
   const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
+  const today = new Date().toDateString();
+
+  // Initialize tracker
+  if (!requestTracker[cleanNumber]) {
+    requestTracker[cleanNumber] = { count: 0, lastRequest: 0, day: today };
+  }
+
+  const now = Date.now();
+  const tracker = requestTracker[cleanNumber];
+
+  // Reset if new day
+  if (tracker.day !== today) {
+    tracker.count = 0;
+    tracker.day = today;
+  }
+
+  // Cooldown check
+  if (now - tracker.lastRequest < COOLDOWN_MS) {
+    throw new Error("⏳ Please wait before requesting another pairing code.");
+  }
+
+  // Max requests check
+  if (tracker.count >= MAX_REQUESTS) {
+    throw new Error("🚫 Maximum pairing code requests reached for today.");
+  }
+
+  // Update tracker
+  tracker.count++;
+  tracker.lastRequest = now;
+
+  // --- Baileys pairing ---
   const { sock, state } = await startTrashcore(cleanNumber);
 
   if (!state.creds.registered) {
@@ -47,6 +97,7 @@ async function getPairingCode(phoneNumber) {
   }
 }
 
+// --- Routes ---
 app.post('/pair', async (req, res) => {
   const { phoneNumber } = req.body;
   if (!phoneNumber) return res.status(400).json({ error: 'Phone number required' });
