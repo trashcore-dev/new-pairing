@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Trashcore Hub Pairing</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #111; color: #eee; }
+    h1 { color: #0f0; }
+    input, button { padding: 0.5em; margin: 0.5em 0; }
+    .code { background: #222; padding: 1em; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Trashcore Hub Pairing</h1>
+  <form id="pairForm">
+    <label>WhatsApp Number (with country code):</label><br>
+    <input type="text" id="phone" placeholder="2547xxxxxxx" required>
+    <button type="submit">Get Pairing Code</button>
+  </form>
+  <div id="result" class="code"></div>
+
+  <script>
+    document.getElementById('pairForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value;
+      const res = await fetch('/pair', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: phone })
+      });
+      const data = await res.json();
+      if (data.pairingCode) {
+        document.getElementById('result').innerHTML =
+          `<h2>Your Pairing Code:</h2><p>${data.pairingCode}</p><p>Enter this code on WhatsApp to complete pairing.</p>`;
+      } else {
+        document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
