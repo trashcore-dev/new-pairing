@@ -17,13 +17,5 @@
       "quantity": 1,
       "size": "free"
     }
-  },
-  "addons": [
-    {
-      "plan": "heroku-postgresql:hobby-dev",
-      "options": {
-        "version": "14"
-      }
-    }
-  ]
+  }
 }
