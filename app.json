@@ -1,0 +1,29 @@
+{
+  "name": "Trashcore Hub Pairing",
+  "description": "A Baileys-powered WhatsApp pairing portal that generates pairing codes and DM's session IDs securely.",
+  "repository": "https://github.com/yourusername/trashcore-hub",
+  "keywords": ["node", "express", "whatsapp", "baileys", "trashcore"],
+  "env": {
+    "SESSIONID": {
+      "description": "Optional session ID if you want to pre-load credentials",
+      "required": false
+    }
+  },
+  "scripts": {
+    "postdeploy": "echo '🚀 Trashcore Hub deployed successfully!'"
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev",
+      "options": {
+        "version": "14"
+      }
+    }
+  ]
+}
