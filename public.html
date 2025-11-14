@@ -2,384 +2,182 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trashcore Hub Pairing</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       margin: 0; 
-      padding: 20px; 
-      background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+      padding: 2em; 
+      background: linear-gradient(135deg, #2a003f, #4b0082); /* purple gradient */
       color: #e6e6e6; 
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      position: relative;
     }
-    
-    .waves {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.3;
-    }
-    
-    .wave {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 200%;
-      height: 100px;
-      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" fill="%233b82f6"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"/></svg>');
-      background-size: 50% 100%;
-      animation: wave 15s linear infinite;
-      opacity: 0.4;
-    }
-    
-    .wave:nth-child(2) {
-      animation: wave 20s linear infinite reverse;
-      opacity: 0.3;
-      bottom: 20px;
-    }
-    
-    .wave:nth-child(3) {
-      animation: wave 25s linear infinite;
-      opacity: 0.2;
-      bottom: 40px;
-    }
-    
-    @keyframes wave {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-25%);
-      }
-    }
-    
     .container {
       width: 100%;
-      max-width: 450px;
-      background: rgba(17, 24, 39, 0.95);
+      max-width: 500px;
+      background: rgba(40, 0, 60, 0.85);
       padding: 2.5em;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(59, 130, 246, 0.2);
-      border: 1px solid #3b82f6;
-      position: relative;
-      z-index: 1;
-      transform: translateY(0);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #5a2a7c;
     }
-    
-    .container:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(59, 130, 246, 0.3);
-    }
-    
     h1 { 
-      color: #60a5fa; 
+      color: #c084fc; 
       text-align: center;
       margin-top: 0;
       font-size: 2.2em;
-      text-shadow: 0 0 15px rgba(96, 165, 250, 0.4);
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
       letter-spacing: 0.5px;
-      margin-bottom: 1.5em;
     }
-    
     label { 
       display: block; 
       margin-bottom: 0.5em; 
-      color: #94a3b8;
+      color: #d1d5db;
       font-weight: 500;
     }
-    
     input { 
       width: 100%; 
       padding: 0.9em; 
       margin: 0.5em 0 1.5em; 
-      border: 2px solid #334155;
-      border-radius: 12px;
-      background: #1e293b;
-      color: #f1f5f9;
+      border: 2px solid #6b21a8;
+      border-radius: 10px;
+      background: #3b0764;
+      color: #f0f0f0;
       font-size: 1em;
       box-sizing: border-box;
-      transition: border-color 0.3s, box-shadow 0.3s;
     }
-    
     input:focus { 
       outline: none; 
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+      border-color: #c084fc;
+      box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.3);
     }
-    
     button { 
-      background: #3b82f6; 
-      color: #ffffff; 
+      background: #c084fc; 
+      color: #1f1f2e; 
       border: none; 
       padding: 0.9em 1.5em; 
-      border-radius: 12px; 
+      border-radius: 10px; 
       cursor: pointer; 
       font-size: 1em;
       font-weight: 600;
-      width: 100%;
-      transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+      margin-right: 0.5em;
+      transition: background 0.3s, transform 0.2s;
     }
-    
     button:hover { 
-      background: #2563eb; 
+      background: #a855f7; 
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
     }
-    
-    button:active { 
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-    }
-    
     .code { 
-      background: #1e293b; 
+      background: #3b0764; 
       padding: 1.5em; 
-      border-radius: 12px; 
+      border-radius: 10px; 
       margin-top: 1.5em;
-      border: 1px solid #334155;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid #6b21a8;
     }
-    
-    .copy-btn { 
-      margin-top: 1em; 
-      padding: 0.6em 1.2em; 
-      cursor: pointer; 
-      background: #4f46e5;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95em;
-      width: auto;
-      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
-    }
-    
-    .copy-btn:hover { 
-      background: #4338ca;
-      transform: translateY(-1px);
-    }
-    
     #pairCode {
       font-size: 1.4em;
       letter-spacing: 3px;
       text-align: center;
       margin: 0.5em 0;
       padding: 0.8em;
-      background: #0f172a;
-      border-radius: 10px;
+      background: #2a003f;
+      border-radius: 8px;
       font-weight: bold;
-      color: #60a5fa;
+      color: #c084fc;
       word-break: break-all;
-      border: 1px solid #334155;
     }
-    
-    p { 
-      margin: 0.8em 0; 
-      line-height: 1.5;
-      color: #cbd5e1;
-    }
-    
-    .error { 
-      color: #f87171 !important;
-    }
-    
-    .progress-container {
-      display: none;
-      margin: 1.5em 0;
+    .stats {
+      margin-top: 1em;
+      font-size: 0.95em;
+      color: #d1d5db;
       text-align: center;
     }
-    
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: #1e293b;
-      border-radius: 3px;
-      overflow: hidden;
-      margin: 1em 0;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: #3b82f6;
-      width: 0%;
-      transition: width 0.3s ease;
-      border-radius: 3px;
-    }
-    
-    .progress-text {
-      color: #94a3b8;
-      font-size: 0.9em;
-    }
-    
-    /* Mobile responsive */
     @media (max-width: 600px) {
-      body {
-        padding: 15px;
-      }
-      
-      .container {
-        padding: 1.8em;
-        margin: 10px;
-      }
-      
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 1.2em;
-      }
-      
-      input, button {
-        padding: 0.8em;
-        margin-bottom: 1.2em;
-      }
-      
-      #pairCode {
-        font-size: 1.2em;
-        letter-spacing: 2px;
-        padding: 0.6em;
-      }
-      
-      .code {
-        padding: 1.2em;
-      }
-      
-      .progress-text {
-        font-size: 0.8em;
-      }
-    }
-    
-    @media (max-width: 400px) {
-      .container {
-        padding: 1.5em;
-      }
-      
-      h1 {
-        font-size: 1.6em;
-      }
-      
-      #pairCode {
-        font-size: 1.1em;
-        letter-spacing: 1px;
-      }
+      body { padding: 1em; }
+      .container { padding: 1.5em; }
+      h1 { font-size: 1.8em; }
+      input, button { font-size: 0.9em; }
     }
   </style>
 </head>
 <body>
-  <div class="waves">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-  </div>
-  
   <div class="container">
     <h1>Trashcore Hub Pairing</h1>
     <form id="pairForm">
       <label>WhatsApp Number (with country code):</label><br>
       <input type="text" id="phone" placeholder="2547xxxxxxxx" required>
-      <button type="submit">Get Pairing Code</button>
-    </form>
-    <div class="progress-container" id="progressContainer">
-      <p class="progress-text">Processing your request...</p>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
+      <div>
+        <button type="submit">Get Pairing Code</button>
+        <button type="button" onclick="deleteSession()">Delete Session</button>
       </div>
-      <p class="progress-text" id="progressStatus">Initializing...</p>
-    </div>
+    </form>
     <div id="result" class="code"></div>
+    <div class="stats" id="stats"></div>
   </div>
 
   <script>
     document.getElementById('pairForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const phone = document.getElementById('phone').value;
-      
-      // Show progress container
-      const progressContainer = document.getElementById('progressContainer');
-      const progressFill = document.getElementById('progressFill');
-      const progressStatus = document.getElementById('progressStatus');
-      
-      progressContainer.style.display = 'block';
-      progressFill.style.width = '0%';
-      progressStatus.textContent = 'Initializing...';
-      
-      // Simulate progress
-      const steps = [
-        { width: '20%', text: 'Validating number...' },
-        { width: '40%', text: 'Connecting to WhatsApp...' },
-        { width: '60%', text: 'Generating pairing code...' },
-        { width: '80%', text: 'Finalizing...' }
-      ];
-      
-      for (const step of steps) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        progressFill.style.width = step.width;
-        progressStatus.textContent = step.text;
+      const res = await fetch('/pair', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: phone })
+      });
+      const data = await res.json();
+      if (data.pairingCode) {
+        document.getElementById('result').innerHTML =
+          `<h2>Your Pairing Code:</h2>
+           <p id="pairCode">${data.pairingCode}</p>
+           <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+           <p>Enter this code on WhatsApp to complete pairing.</p>`;
+      } else {
+        document.getElementById('result').innerHTML = `<p class="error">Error: ${data.error}</p>`;
       }
-      
-      // Make actual request
-      try {
-        const res = await fetch('/pair', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phoneNumber: phone })
-        });
-        const data = await res.json();
-        
-        progressFill.style.width = '100%';
-        progressStatus.textContent = 'Complete!';
-        
-        // Hide progress after a short delay
-        setTimeout(() => {
-          progressContainer.style.display = 'none';
-          
-          if (data.pairingCode) {
-            document.getElementById('result').innerHTML =
-              `<h2>Your Pairing Code:</h2>
-               <p id="pairCode">${data.pairingCode}</p>
-               <button class="copy-btn" onclick="copyCode()">Copy Code</button>
-               <p>Enter this code on WhatsApp to complete pairing.</p>`;
-          } else {
-            document.getElementById('result').innerHTML = `<p class="error">Error: ${data.error}</p>`;
-          }
-        }, 500);
-        
-      } catch (error) {
-        progressContainer.style.display = 'none';
-        document.getElementById('result').innerHTML = `<p class="error">Error: ${error.message}</p>`;
-      }
+      updateStats();
     });
+
+    async function deleteSession() {
+      const phone = document.getElementById('phone').value;
+      if (!phone) {
+        alert("Please enter your WhatsApp number first.");
+        return;
+      }
+      const res = await fetch('/delete-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: phone })
+      });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('result').innerHTML = `<p>🗑️ ${data.message}</p>`;
+      } else {
+        document.getElementById('result').innerHTML = `<p class="error">Error: ${data.error}</p>`;
+      }
+      updateStats();
+    }
 
     function copyCode() {
       const codeText = document.getElementById('pairCode').innerText;
       navigator.clipboard.writeText(codeText).then(() => {
         alert("Pairing code copied to clipboard!");
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = codeText;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert("Pairing code copied to clipboard!");
       });
     }
+
+    async function updateStats() {
+      const res = await fetch('/stats');
+      const data = await res.json();
+      const uptimeMinutes = Math.floor(data.uptime / 60);
+      document.getElementById('stats').innerHTML =
+        `📊 Requests today: ${data.requests} | ⏱️ Uptime: ${uptimeMinutes} min`;
+    }
+
+    // Auto-update stats every 30s
+    setInterval(updateStats, 30000);
+    updateStats();
   </script>
 </body>
 </html>
