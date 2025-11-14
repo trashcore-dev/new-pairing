@@ -19,7 +19,29 @@ async function startTrashcore(number) {
     auth: state,
     browser: Browsers.windows('Firefox'),
     printQRInTerminal: false,
+    // 👇 enable pairing mode
+    mobile: { pairingCode: true }
   });
+
+  sock.ev.on('creds.update', saveCreds);
+
+  return sock;
+}
+
+async function getPairingCode(phoneNumber) {
+  const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
+  const sock = await startTrashcore(cleanNumber);
+
+  // Wait until socket is ready
+  await new Promise(resolve => {
+    sock.ev.on('connection.update', (update) => {
+      if (update.connection === 'open') resolve();
+    });
+  });
+
+  const custom = "TRASHBOT";
+  return await sock.requestPairingCode(cleanNumber, custom);
+}
 
   sock.ev.on('creds.update', async () => {
     await saveCreds();
@@ -29,13 +51,6 @@ async function startTrashcore(number) {
   });
 
   return sock;
-}
-
-async function getPairingCode(phoneNumber) {
-  const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
-  const sock = await startTrashcore(cleanNumber);
-  const custom = "TRASHBOT";
-  return await sock.requestPairingCode(cleanNumber, custom);
 }
 
 app.post('/pair', async (req, res) => {
