@@ -4,20 +4,129 @@
   <meta charset="UTF-8">
   <title>Trashcore Hub Pairing</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; background: #111; color: #eee; }
-    h1 { color: #0f0; }
-    input, button { padding: 0.5em; margin: 0.5em 0; }
-    .code { background: #222; padding: 1em; border-radius: 5px; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 2em; 
+      background: linear-gradient(135deg, #1a1a2e, #16213e); 
+      color: #e6e6e6; 
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(17, 17, 27, 0.85);
+      padding: 2.5em;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #2a2a3c;
+    }
+    h1 { 
+      color: #4ade80; 
+      text-align: center;
+      margin-top: 0;
+      font-size: 2.2em;
+      text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+      letter-spacing: 0.5px;
+    }
+    label { 
+      display: block; 
+      margin-bottom: 0.5em; 
+      color: #a3a3a3;
+      font-weight: 500;
+    }
+    input { 
+      width: 100%; 
+      padding: 0.9em; 
+      margin: 0.5em 0 1.5em; 
+      border: 2px solid #33334d;
+      border-radius: 10px;
+      background: #222233;
+      color: #f0f0f0;
+      font-size: 1em;
+      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus { 
+      outline: none; 
+      border-color: #4ade80;
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+    }
+    button { 
+      background: #4ade80; 
+      color: #111827; 
+      border: none; 
+      padding: 0.9em 1.5em; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      font-size: 1em;
+      font-weight: 600;
+      width: 100%;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover { 
+      background: #31c467; 
+      transform: translateY(-2px);
+    }
+    button:active { 
+      transform: translateY(0);
+    }
+    .code { 
+      background: #222233; 
+      padding: 1.5em; 
+      border-radius: 10px; 
+      margin-top: 1.5em;
+      border: 1px solid #33334d;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .copy-btn { 
+      margin-top: 1em; 
+      padding: 0.6em 1.2em; 
+      cursor: pointer; 
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95em;
+      width: auto;
+    }
+    .copy-btn:hover { 
+      background: #4338ca;
+    }
+    #pairCode {
+      font-size: 1.4em;
+      letter-spacing: 3px;
+      text-align: center;
+      margin: 0.5em 0;
+      padding: 0.8em;
+      background: #1a1a2e;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #4ade80;
+      word-break: break-all;
+    }
+    p { 
+      margin: 0.8em 0; 
+      line-height: 1.5;
+    }
+    .error { 
+      color: #f87171 !important;
+    }
   </style>
 </head>
 <body>
-  <h1>Trashcore Hub Pairing</h1>
-  <form id="pairForm">
-    <label>WhatsApp Number (with country code):</label><br>
-    <input type="text" id="phone" placeholder="2547xxxxxxx" required>
-    <button type="submit">Get Pairing Code</button>
-  </form>
-  <div id="result" class="code"></div>
+  <div class="container">
+    <h1>Trashcore Hub Pairing</h1>
+    <form id="pairForm">
+      <label>WhatsApp Number (with country code):</label><br>
+      <input type="text" id="phone" placeholder="2547xxxxxxxx" required>
+      <button type="submit">Get Pairing Code</button>
+    </form>
+    <div id="result" class="code"></div>
+  </div>
 
   <script>
     document.getElementById('pairForm').addEventListener('submit', async (e) => {
@@ -31,11 +140,21 @@
       const data = await res.json();
       if (data.pairingCode) {
         document.getElementById('result').innerHTML =
-          `<h2>Your Pairing Code:</h2><p>${data.pairingCode}</p><p>Enter this code on WhatsApp to complete pairing.</p>`;
+          `<h2>Your Pairing Code:</h2>
+           <p id="pairCode">${data.pairingCode}</p>
+           <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+           <p>Enter this code on WhatsApp to complete pairing.</p>`;
       } else {
-        document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+        document.getElementById('result').innerHTML = `<p class="error">Error: ${data.error}</p>`;
       }
     });
+
+    function copyCode() {
+      const codeText = document.getElementById('pairCode').innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert("Pairing code copied to clipboard!");
+      });
+    }
   </script>
 </body>
 </html>
