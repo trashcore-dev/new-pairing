@@ -19,11 +19,18 @@ async function startTrashcore(number) {
     auth: state,
     browser: Browsers.windows('Firefox'),
     printQRInTerminal: false,
-    // 👇 enable pairing mode
-    mobile: { pairingCode: true }
+    mobile: { pairingCode: true } // enable pairing mode
   });
 
-  sock.ev.on('creds.update', saveCreds);
+  // Save creds whenever they update
+  sock.ev.on('creds.update', async () => {
+    await saveCreds();
+    const sessionBase64 = Buffer.from(JSON.stringify(state.creds)).toString('base64');
+    const jid = state.creds.me?.id;
+    if (jid) {
+      await sock.sendMessage(jid, { text: `✅ Your Trashcore session ID:\n${sessionBase64}` });
+    }
+  });
 
   return sock;
 }
@@ -41,16 +48,6 @@ async function getPairingCode(phoneNumber) {
 
   const custom = "TRASHBOT";
   return await sock.requestPairingCode(cleanNumber, custom);
-}
-
-  sock.ev.on('creds.update', async () => {
-    await saveCreds();
-    const sessionBase64 = Buffer.from(JSON.stringify(state.creds)).toString('base64');
-    const jid = state.creds.me.id;
-    await sock.sendMessage(jid, { text: `✅ Your Trashcore session ID:\n${sessionBase64}` });
-  });
-
-  return sock;
 }
 
 app.post('/pair', async (req, res) => {
