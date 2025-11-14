@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "backend.js",
   "scripts": {
-    "start": "node backend.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@whiskeysockets/baileys": "npm:wileys",
