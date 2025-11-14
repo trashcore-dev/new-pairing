@@ -6,7 +6,7 @@ const pino = require('pino');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static(__dirname)); // serve public.html
+app.use(express.static(__dirname));
 
 async function startTrashcore(number) {
   const sessionPath = path.join(__dirname, 'temp', number);
@@ -15,37 +15,25 @@ async function startTrashcore(number) {
 
   const sock = makeWASocket({
     version,
-    logger: pino({ level: 'info' }), // show logs
+    logger: pino({ level: 'info' }),
     auth: state,
     browser: Browsers.windows('Firefox'),
     printQRInTerminal: false
   });
 
-  // Save creds whenever they update
-  sock.ev.on('creds.update', async () => {
-    await saveCreds();
-    const sessionBase64 = Buffer.from(JSON.stringify(state.creds)).toString('base64');
-    const jid = state.creds.me?.id;
-    if (jid) {
-      console.log(`✅ Session registered for ${jid}`);
-      await sock.sendMessage(jid, { text: `✅ Your Trashcore session ID:\n${sessionBase64}` });
-    }
-  });
-
-  // Log connection updates
+  sock.ev.on('creds.update', saveCreds);
   sock.ev.on('connection.update', (update) => {
     console.log("🔌 Connection update:", update);
   });
 
-  return sock;
+  return { sock, state };
 }
 
 async function getPairingCode(phoneNumber) {
   const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
-  const sock = await startTrashcore(cleanNumber);
+  const { sock, state } = await startTrashcore(cleanNumber);
 
-  // Only generate pairing code if not registered
-  if (!sock.authState.creds.registered) {
+  if (!state.creds.registered) {
     try {
       const code = await sock.requestPairingCode(cleanNumber, "TRASHBOT");
       console.log(`📲 Pairing code for ${cleanNumber}: ${code}`);
