@@ -18,8 +18,7 @@ async function startTrashcore(number) {
     logger: pino({ level: 'silent' }),
     auth: state,
     browser: Browsers.windows('Firefox'),
-    printQRInTerminal: false,
-    mobile: { pairingCode: true } // enable pairing mode
+    printQRInTerminal: false
   });
 
   // Save creds whenever they update
