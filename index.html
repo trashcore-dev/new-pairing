@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trashcore Pairing • Stats</title>
+  <meta name="description" content="Generate pairing codes for Trashcore Bots. Real-time server stats: ping, uptime, sessions." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>♻️</text></svg>">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-xodcY+Kd+K5VJ7h3KJvDxJ1hYhV6FzJ8xK6jzJz7GqV+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+Xv7Z5+..."
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    :root {
+      --primary: linear-gradient(135deg, #ff4500, #00ffaa, #ff1493);
+      --bg: #0a0a16;
+      --glass: rgba(15, 15, 35, 0.65);
+      --text: #f0f4ff;
+      --muted: #a8b2d1;
+      --highlight: #03dac6;
+      --purple: #bb86fc;
+      --success: #00ffaa;
+      --error: #ff5555;
+      --radius: 16px;
+      --blur: 12px;
+      --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding-top: 72px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .background {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 69, 0, 0.05), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(0, 255, 170, 0.05), transparent 45%),
+        linear-gradient(135deg, #0a0a16, #141428);
+      z-index: -2;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1.5rem;
+      background: var(--glass);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      z-index: 100;
+      border-bottom: 1px solid rgba(100, 180, 255, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-weight: 800;
+      font-size: 1.45rem;
+    }
+
+    .logo-icon { color: var(--highlight); }
+    .logo-text {
+      background: var(--primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .battery {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      background: rgba(10, 10, 25, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      border: 1px solid rgba(100, 180, 255, 0.15);
+    }
+
+    .battery-icon { color: var(--highlight); }
+
+    main {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 0 1.2rem 2.5rem;
+    }
+
+    section { margin-bottom: 2.2rem; }
+
+    h1 {
+      text-align: center;
+      color: var(--purple);
+      font-size: 1.8rem;
+      margin: 1.8rem 0 1.4rem;
+      font-weight: 600;
+    }
+
+    /* Cards */
+    .cards { display: flex; flex-direction: column; gap: 1.3rem; }
+    .card {
+      background: rgba(20, 20, 40, 0.7);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(100,150,255,0.1);
+      border: 1px solid rgba(150,150,200,0.08);
+      transition: var(--transition);
+      text-align: center;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(187,134,252,0.15); }
+    .card h2 { color: var(--highlight); margin-bottom: 0.8rem; font-size: 1.25rem; }
+    .card p { color: #d0d6ee; margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      color: white;
+      text-decoration: none;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .btn:hover { transform: scale(1.03); box-shadow: 0 6px 12px rgba(0,0,0,0.4); }
+
+    /* Box */
+    .box {
+      background: var(--glass);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 0 1px rgba(100,247,255,0.1);
+      text-align: center;
+    }
+    .box h2 { color: var(--highlight); margin-bottom: 1.2rem; font-size: 1.5rem; }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .stat-item { text-align: center; }
+    .stat-icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--muted); }
+
+    .status-line {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(100,150,255,0.1);
+    }
+    .status-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-weight: 600;
+    }
+    .status-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .stats-time {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Pairing */
+    .input-group {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+    #number {
+      flex: 1;
+      padding: 0.9rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(120,180,255,0.2);
+      background: rgba(10,10,30,0.6);
+      color: white;
+      font-size: 1rem;
+    }
+    #number:focus {
+      outline: none;
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 2px rgba(3,218,198,0.2);
+    }
+    #submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.9rem 1.3rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    #submit:hover:not(:disabled) { transform: translateY(-2px); }
+    #submit:disabled { opacity: 0.7; cursor: wait; }
+
+    #pair-result {
+      min-height: 50px;
+      padding: 0.9rem;
+      background: rgba(10,10,30,0.5);
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+    }
+
+    /* ✅ Vibrant Animated Copy Button */
+    .copy-btn {
+      margin-top: 0.9rem;
+      padding: 0.8rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 0 2px transparent;
+      display: none; /* hidden until code is generated */
+    }
+
+    .copy-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #ff4500, #00ffaa, #ff1493, #bb86fc, #03dac6);
+      background-size: 300% 300%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: pulseGradient 3s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    .copy-btn span {
+      background: rgba(8, 8, 20, 0.8);
+      padding: 0 0.4rem;
+      border-radius: 50px;
+      display: inline-block;
+    }
+
+    .copy-btn i {
+      font-size: 1.1rem;
+    }
+
+    .copy-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 16px rgba(0, 255, 170, 0.3),
+                  0 0 20px rgba(187, 134, 252, 0.2);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .copy-btn.success {
+      animation: pulseSuccess 0.4s ease;
+    }
+
+    .copy-btn.success::before {
+      background: linear-gradient(45deg, #00ffaa, #03dac6, #00ffaa);
+      animation: none;
+    }
+
+    @keyframes pulseGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes pulseSuccess {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* ✅ Enhanced Music Player */
+    .player {
+      background: var(--glass);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .album-art-container {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(100,247,255,0.2);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    #album-art-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .track-info {
+      margin-bottom: 1rem;
+    }
+
+    .song-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(90deg, #ff4500, #00ffaa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.3rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(100,150,255,0.1);
+      border-radius: 3px;
+      margin: 0.8rem 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--highlight);
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+
+    .time-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.9rem;
+      margin: 0.8rem 0;
+    }
+
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(10,10,30,0.6);
+      border: 1px solid rgba(100,200,255,0.3);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .control-btn:hover {
+      background: rgba(100,200,255,0.15);
+      transform: scale(1.1);
+    }
+
+    .play-btn-big {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .play-btn-big:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      margin: 0.8rem 0;
+    }
+
+    .volume-icon {
+      color: var(--highlight);
+      font-size: 1rem;
+    }
+
+    .volume-slider {
+      width: 100px;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(100,150,255,0.15);
+      outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--highlight);
+      cursor: pointer;
+    }
+
+    .song-select {
+      width: 100%;
+      max-width: 280px;
+      padding: 0.6rem 0.8rem;
+      background: rgba(10,10,30,0.6);
+      color: white;
+      border: 1px solid rgba(100,180,255,0.3);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0.8rem auto;
+      outline: none;
+    }
+
+    .song-select:focus {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 2px rgba(3,218,198,0.2);
+    }
+
+    .playlist-toggle {
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      font-size: 0.85rem;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .playlist {
+      margin-top: 1rem;
+      text-align: left;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .playlist.show {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .playlist-item {
+      padding: 0.5rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .playlist-item:hover,
+    .playlist-item.active {
+      background: rgba(100,200,255,0.08);
+      color: white;
+    }
+
+    .playlist-item.active {
+      border-left: 3px solid var(--highlight);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      background: rgba(10, 10, 30, 0.85);
+      border: 1px solid rgba(100, 247, 255, 0.3);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.2rem;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      z-index: 200;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast i {
+      color: var(--highlight);
+      font-size: 1.1rem;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 600px) {
+      .input-group { flex-direction: column; }
+      #submit { width: 100%; }
+      h1 { font-size: 1.6rem; }
+      header { padding: 0.8rem 1rem; }
+      .logo { font-size: 1.3rem; }
+      .controls { flex-wrap: wrap; }
+      .volume-container { flex-wrap: wrap; }
+      .album-art-container { width: 130px; height: 130px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <header>
+    <div class="logo">
+      <i class="fas fa-recycle logo-icon"></i>
+      <span class="logo-text">TRASHCORE PAIRING</span>
+    </div>
+    <div class="battery">
+      <i class="fas fa-battery-full battery-icon" id="battery-icon"></i>
+      <span id="battery-level">--%</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Tutorials -->
+    <section>
+      <h1>📚 Deployment Tutorials</h1>
+      <div class="cards">
+        <div class="card">
+          <h2>🚀 Hosting Panel</h2>
+          <p>Deploy Trashcore Ultra on shared/VPS panels.</p>
+          <a href="https://youtu.be/naMQScCJi0g?si=ldugb37FDF73nJn3" class="btn" target="_blank" rel="noopener">Watch</a>
+        </div>
+        <div class="card">
+          <h2>🤖 Termux (Android)</h2>
+          <p>Run directly on Android using Termux.</p>
+          <a href="https://youtu.be/WqsXdRX_W7I?si=3vxAv3l3WrNnyjar" class="btn" target="_blank" rel="noopener">Watch</a>
+        </div>
+        <div class="card">
+          <h2>♦️ Web Platform</h2>
+          <p>One-click deploy via Trashcore Hosting.</p>
+          <a href="https://youtube.com/shorts/JiRlLAZ5zII?si=h8eIY7HKUx1g1h-Y" class="btn" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section>
+      <div class="box">
+        <h2>👾 System Status</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon" style="color:#00ffaa;">⚡</div>
+            <div class="stat-value" id="ping-val">— ms</div>
+            <div class="stat-label">Ping</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon" style="color:#bb86fc;">🕗</div>
+            <div class="stat-value" id="uptime-val">—</div>
+            <div class="stat-label">Uptime</div>
+          </div>
+        </div>
+        <div class="status-line">
+          <div class="status-content">
+            <span id="status-icon">🔁</span>
+            <span id="status-text">Checking…</span>
+          </div>
+          <div class="status-sub" id="status-sub">—</div>
+        </div>
+        <div class="stats-time">
+          Updated: <span id="stats-time">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pairing -->
+    <section>
+      <h1>🔐 Generate Pairing Code</h1>
+      <div class="box">
+        <h2>PAIRING CODE</h2>
+        <h5>TRASHCORE BOTS</h5>
+        <p>Enter your WhatsApp number (without country code)</p>
+        <div class="input-group">
+          <input type="tel" id="number" placeholder="e.g. 254712345678" autocomplete="off" />
+          <button id="submit">REQUEST</button>
+        </div>
+        <div id="pair-result">—</div>
+        <button id="copy-code" class="copy-btn">
+          <i class="fas fa-copy"></i>
+          <span>COPY CODE</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ✅ Enhanced Music Player -->
+    <section>
+      <div class="player">
+        <h3>🎧 Pairing Soundtrack</h3>
+
+        <div class="album-art-container">
+          <canvas id="album-art-canvas" width="400" height="400"></canvas>
+        </div>
+
+        <div class="track-info">
+          <div class="song-title" id="song-title">Ambient Pairing Vibe</div>
+          <div class="subtitle" id="song-artist">by Trashcore Devs</div>
+        </div>
+
+        <div class="progress-container" id="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-info">
+          <span id="current-time">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+          <button id="loop-btn" class="control-btn" title="Loop">
+            <i class="fas fa-redo"></i>
+          </button>
+          <button id="prev-btn" class="control-btn" title="Previous">
+            <i class="fas fa-step-backward"></i>
+          </button>
+          <button id="play-btn" class="play-btn-big">
+            <i class="fas fa-play" id="play-icon-big"></i>
+          </button>
+          <button id="next-btn" class="control-btn" title="Next">
+            <i class="fas fa-step-forward"></i>
+          </button>
+          <button id="shuffle-btn" class="control-btn" title="Shuffle">
+            <i class="fas fa-random"></i>
+          </button>
+        </div>
+
+        <div class="volume-container">
+          <i class="fas fa-volume-up volume-icon"></i>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="volume-slider">
+        </div>
+
+        <select id="song-select" class="song-select">
+          <option value="https://files.catbox.moe/z6092u.mp3">Daddy O</option>
+          <option value="https://files.catbox.moe/6ofcuu.mp3">Dreamers</option>
+          <option value="https://files.catbox.moe/8ti05k.mp3">I'm in love</option>
+          <option value="https://files.catbox.moe/by95ja.mp3">All i know</option>
+        </select>
+
+        <button id="toggle-playlist" class="playlist-toggle">📜 Show Playlist</button>
+        <div id="playlist" class="playlist">
+          <div class="playlist-item active" data-url="https://files.catbox.moe/z6092u.mp3">
+            <span>1. Daddy Oo</span> <small>2:38</small>
+          </div>
+          <div class="playlist-item" data-url="https://files.catbox.moe/6ofcuu.mp3">
+            <span>2. Dreamers</span> <small>3:12</small>
+          </div>
+          <div class="playlist-item" data-url="https://files.catbox.moe/8ti05k.mp3">
+            <span>3. I'm in love</span> <small>2:54</small>
+          </div>
+          <div class="playlist-item" data-url="https://files.catbox.moe/by95ja.mp3">
+            <span>4. All i know</span> <small>3:27</small>
+          </div>
+        </div>
+
+        <audio id="audio" preload="metadata"></audio>
+      </div>
+    </section>
+  </main>
+
+  <!-- ✅ Now Playing Toast -->
+  <div id="now-playing-toast" class="toast hidden">
+    <i class="fas fa-music"></i>
+    <span id="toast-text">Now Playing: Ambient Pairing Vibe</span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+  <script>
+    // API Base
+    const API_BASE = 'https://trashcore-pairing-production.up.railway.app';
+    const PAIR_URL = `${API_BASE}/code`;
+    const PING_URL = `${API_BASE}/ping`;
+
+    // DOM Elements
+    const numberInput = document.getElementById('number');
+    const submitBtn = document.getElementById('submit');
+    const pairResultEl = document.getElementById('pair-result');
+    const copyBtn = document.getElementById('copy-code');
+    const batteryIcon = document.getElementById('battery-icon');
+    const batteryLevel = document.getElementById('battery-level');
+
+    // Stats UI
+    const pingEl = document.getElementById('ping-val');
+    const uptimeEl = document.getElementById('uptime-val');
+    const statusIcon = document.getElementById('status-icon');
+    const statusText = document.getElementById('status-text');
+    const statusSub = document.getElementById('status-sub');
+    const statsTime = document.getElementById('stats-time');
+
+    // 🔹 Enhanced Copy Button
+    copyBtn.onclick = async () => {
+      const codeSpan = pairResultEl.querySelector('span[data-code]');
+      if (!codeSpan) return;
+
+      try {
+        await navigator.clipboard.writeText(codeSpan.textContent.trim());
+
+        copyBtn.classList.add('success');
+        copyBtn.innerHTML = `<i class="fas fa-check"></i> <span>COPIED!</span>`;
+
+        setTimeout(() => {
+          copyBtn.classList.remove('success');
+          copyBtn.innerHTML = `<i class="fas fa-copy"></i> <span>COPY CODE</span>`;
+        }, 2000);
+      } catch {
+        alert('Copy failed — please copy manually.');
+      }
+    };
+
+    // 🔹 Pairing
+    submitBtn.onclick = async () => {
+      const num = numberInput.value.trim().replace(/\D/g, '');
+      if (!num) return showError('⚠️ Enter number (digits only)');
+      if (num.length < 9) return showError('❌ Min 9 digits');
+
+      submitBtn.disabled = true;
+      showInfo('⏳ Requesting code…');
+      copyBtn.style.display = 'none';
+
+      try {
+        const res = await axios.get(`${PAIR_URL}?number=${num}`, { timeout: 10000 });
+        const code = res.data?.code;
+        if (!code) throw new Error();
+
+        pairResultEl.innerHTML = `
+          <span style="color:var(--highlight); font-weight:600;">CODE:</span>
+          <span data-code style="color:white; margin-left:0.5rem; letter-spacing:1px;">${code}</span>
+        `;
+
+        // ✅ Show copy button & update album art
+        copyBtn.style.display = 'inline-flex';
+
+        // Update album art with new code
+        const currentTrack = tracks[currentPlaylistIndex];
+        renderAlbumArt(currentTrack.title, code);
+      } catch (err) {
+        let msg = '❌ Failed to get code';
+        if (err.code === 'ECONNABORTED') msg = '⏱️ Timed out';
+        else if (err.response?.status === 429) msg = '⏱️ Too many requests';
+        else if (!err.response) msg = '🌐 Network/CORS error';
+        showError(msg);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    function showError(msg) { pairResultEl.innerHTML = `<span style="color:var(--error);">${msg}</span>`; }
+    function showInfo(msg) { pairResultEl.innerHTML = `<span style="color:var(--highlight);">${msg}</span>`; }
+
+    // 🔹 Dynamic Album Art
+    function renderAlbumArt(trackTitle, pairingCode = null) {
+      const canvas = document.getElementById('album-art-canvas');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Gradient BG
+      const grad = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, w);
+      grad.addColorStop(0, '#1a0a2e');
+      grad.addColorStop(0.5, '#0a0a16');
+      grad.addColorStop(1, '#000000');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Noise
+      for (let i = 0; i < 200; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const alpha = Math.random() * 0.02;
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fillRect(x, y, 1, 1);
+      }
+
+      // ♻️ Icon
+      ctx.font = 'bold 80px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#00ffaa';
+      ctx.fillText('♻️', w/2, h/2 - 60);
+
+      // Title
+      ctx.font = 'bold 32px "Segoe UI", system-ui';
+      ctx.fillStyle = '#f0f4ff';
+      ctx.fillText(trackTitle, w/2, h/2 + 20);
+
+      // Subtitle
+      ctx.font = '500 18px "Segoe UI"';
+      ctx.fillStyle = '#bb86fc';
+      ctx.fillText('TRASHCORE • PAIRING', w/2, h/2 + 50);
+
+      // Pairing code (if any)
+      if (pairingCode) {
+        ctx.font = '600 16px monospace';
+        ctx.fillStyle = 'rgba(3,218,198,0.8)';
+        ctx.fillText(`CODE: ${pairingCode}`, w/2, h/2 + 85);
+      }
+
+      // Border
+      ctx.strokeStyle = 'rgba(100,247,255,0.2)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.strokeRect(4, 4, w - 8, h - 8);
+      ctx.setLineDash([]);
+    }
+
+    // 🔹 Now Playing Toast
+    function showNowPlaying(title) {
+      const toast = document.getElementById('now-playing-toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.textContent = `Now Playing: ${title}`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // 🔹 Audio Player
+    const audioEl = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const playIconBig = document.getElementById('play-icon-big');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const loopBtn = document.getElementById('loop-btn');
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const songSelect = document.getElementById('song-select');
+    const togglePlaylistBtn = document.getElementById('toggle-playlist');
+    const playlistEl = document.getElementById('playlist');
+    const playlistItems = document.querySelectorAll('.playlist-item');
+
+    let isShuffle = false;
+    let isLoop = false;
+    let currentPlaylistIndex = 0;
+
+    const tracks = [
+      { url: "https://files.catbox.moe/z6092u.mp3", title: "Make it dance", artist: "by Wizkid", duration: "2:38" },
+      { url: "https://files.catbox.moe/6ofcuu.mp3", title: "Dreamers", artist: "by FIFA", duration: "4:15" },
+      { url: "https://files.catbox.moe/8ti05k.mp3", title: "I'm in love", artist: "by Reggea", duration: "3:28" },
+      { url: "https://files.catbox.moe/by95ja.mp3", title: "All i know", artist: "by YouTube", duration: "3:36" }
+    ];
+
+    function loadTrack(index) {
+      const track = tracks[index];
+      audioEl.src = track.url;
+      document.getElementById('song-title').textContent = track.title;
+      document.getElementById('song-artist').textContent = track.artist;
+      document.title = `🎧 ${track.title} • Trashcore`;
+
+      // Render dynamic art (with pairing code if exists)
+      const codeSpan = pairResultEl.querySelector('span[data-code]');
+      const pairingCode = codeSpan ? codeSpan.textContent.trim() : null;
+      renderAlbumArt(track.title, pairingCode);
+
+      songSelect.value = track.url;
+      playlistItems.forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+
+      progressBar.style.width = '0%';
+      currentTimeEl.textContent = '0:00';
+      durationEl.textContent = track.duration || '0:00';
+
+      showNowPlaying(track.title);
+    }
+
+    loadTrack(0);
+
+    playBtn.onclick = () => {
+      if (audioEl.paused) {
+        audioEl.play().catch(e => {
+          showError('▶️ Click page first to enable audio, then try again.');
+        });
+        playIconBig.className = 'fas fa-pause';
+      } else {
+        audioEl.pause();
+        playIconBig.className = 'fas fa-play';
+      }
+    };
+
+    prevBtn.onclick = () => {
+      currentPlaylistIndex = isShuffle ? Math.floor(Math.random() * tracks.length) : Math.max(0, currentPlaylistIndex - 1);
+      loadTrack(currentPlaylistIndex);
+      audioEl.play();
+      playIconBig.className = 'fas fa-pause';
+    };
+
+    nextBtn.onclick = () => {
+      currentPlaylistIndex = isShuffle ? Math.floor(Math.random() * tracks.length) : Math.min(tracks.length - 1, currentPlaylistIndex + 1);
+      loadTrack(currentPlaylistIndex);
+      audioEl.play();
+      playIconBig.className = 'fas fa-pause';
+    };
+
+    loopBtn.onclick = () => {
+      isLoop = !isLoop;
+      audioEl.loop = isLoop;
+      loopBtn.style.color = isLoop ? '#00ffaa' : '';
+      loopBtn.querySelector('i').style.opacity = isLoop ? 1 : 0.6;
+    };
+
+    shuffleBtn.onclick = () => {
+      isShuffle = !isShuffle;
+      shuffleBtn.style.color = isShuffle ? '#ff4500' : '';
+      shuffleBtn.querySelector('i').style.opacity = isShuffle ? 1 : 0.6;
+    };
+
+    volumeSlider.oninput = () => { audioEl.volume = volumeSlider.value; };
+
+    progressContainer.onclick = (e) => {
+      const width = progressContainer.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audioEl.duration || 1;
+      audioEl.currentTime = (clickX / width) * duration;
+    };
+
+    audioEl.ontimeupdate = () => {
+      const currentTime = audioEl.currentTime;
+      const duration = audioEl.duration || 0;
+      const progressPercent = duration ? (currentTime / duration) * 100 : 0;
+      progressBar.style.width = `${progressPercent}%`;
+
+      const ct = formatTime(currentTime);
+      const dur = formatTime(duration);
+      currentTimeEl.textContent = ct;
+      if (duration > 0) durationEl.textContent = dur;
+    };
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    songSelect.onchange = () => {
+      const url = songSelect.value;
+      const index = tracks.findIndex(t => t.url === url);
+      if (index !== -1) {
+        currentPlaylistIndex = index;
+        loadTrack(index);
+        if (!audioEl.paused) audioEl.play();
+      }
+    };
+
+    playlistItems.forEach((item, index) => {
+      item.onclick = () => {
+        currentPlaylistIndex = index;
+        loadTrack(index);
+        audioEl.play();
+        playIconBig.className = 'fas fa-pause';
+      };
+    });
+
+    togglePlaylistBtn.onclick = () => {
+      playlistEl.classList.toggle('show');
+      togglePlaylistBtn.textContent = playlistEl.classList.contains('show') ? '🔺 Hide Playlist' : '📜 Show Playlist';
+    };
+
+    audioEl.onended = () => {
+      if (isLoop) {
+        audioEl.currentTime = 0;
+        audioEl.play();
+      } else {
+        currentPlaylistIndex = isShuffle
+          ? Math.floor(Math.random() * tracks.length)
+          : Math.min(tracks.length - 1, currentPlaylistIndex + 1);
+        loadTrack(currentPlaylistIndex);
+        setTimeout(() => audioEl.play(), 100);
+      }
+      playIconBig.className = 'fas fa-pause';
+    };
+
+    // 🔹 Battery
+    async function initBattery() {
+      if (!navigator.getBattery) return batteryLevel.textContent = 'N/A';
+      try {
+        const battery = await navigator.getBattery();
+        const update = () => {
+          const pct = Math.round(battery.level * 100);
+          batteryLevel.textContent = `${pct}%`;
+          let icon = 'battery-empty';
+          if (pct > 80) icon = 'battery-full';
+          else if (pct > 60) icon = 'battery-three-quarters';
+          else if (pct > 40) icon = 'battery-half';
+          else if (pct > 20) icon = 'battery-quarter';
+          batteryIcon.className = `fas fa-${icon}`;
+          if (battery.charging) {
+            batteryIcon.className += ' fa-bolt';
+            batteryIcon.style.color = '#00ffaa';
+          } else batteryIcon.style.color = '';
+        };
+        battery.addEventListener('levelchange', update);
+        battery.addEventListener('chargingchange', update);
+        update();
+      } catch { batteryLevel.textContent = 'N/A'; }
+    }
+
+    // 🔹 Stats
+    async function fetchStats() {
+      try {
+        const t0 = performance.now();
+        const res = await axios.get(PING_URL, { timeout: 5000 });
+        const pingMs = Math.round(performance.now() - t0);
+        const { uptime, status, timestamp } = res.data;
+
+        pingEl.textContent = `${pingMs} ms`;
+        if (pingMs < 100) pingEl.style.color = '#00ffaa';
+        else if (pingMs < 300) pingEl.style.color = '#ffaa00';
+        else pingEl.style.color = '#ff5555';
+
+        const parts = [];
+        if (uptime.hours > 0) parts.push(`${uptime.hours}h`);
+        if (uptime.minutes > 0) parts.push(`${uptime.minutes}m`);
+        if (parts.length === 0) parts.push(`${uptime.seconds}s`);
+        uptimeEl.textContent = parts.join(' ');
+
+        if (status === 'active') {
+          statusIcon.textContent = '🟢';
+          statusText.textContent = 'Active';
+          statusText.style.color = '#00ffaa';
+          statusSub.textContent = 'Server running';
+        } else {
+          statusIcon.textContent = '🔴';
+          statusText.textContent = 'Inactive';
+          statusText.style.color = '#ff5555';
+          statusSub.textContent = 'Backend down';
+        }
+
+        statsTime.textContent = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      } catch (err) {
+        pingEl.textContent = '— ms';
+        uptimeEl.textContent = '—';
+        statusIcon.textContent = '❌';
+        statusText.textContent = 'Offline';
+        statusText.style.color = '#ff5555';
+        statusSub.textContent = 'No response';
+        statsTime.textContent = '—';
+      }
+    }
+
+    // 🔹 Init
+    document.addEventListener('DOMContentLoaded', () => {
+      initBattery();
+      fetchStats();
+      setInterval(fetchStats, 30000);
+    });
+  </script>
+</body>
+</html>
