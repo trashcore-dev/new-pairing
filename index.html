@@ -88,7 +88,6 @@ body{height:100%;min-height:-webkit-fill-available;background:var(--bg);color:va
 /* CARDS */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
 .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-@media(max-width:360px){.stats-row{grid-template-columns:1fr 1fr}}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
 .stat-card.cyan::before{background:var(--accent2)}
@@ -117,7 +116,7 @@ body{height:100%;min-height:-webkit-fill-available;background:var(--bg);color:va
 .server-actions{display:flex;gap:6px}
 .server-actions .btn{flex:1;padding:8px 4px;font-size:.7rem}
 
-/* MISC LAYOUT */
+/* MISC */
 .section-title{font-size:.9rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
 .empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
@@ -173,7 +172,7 @@ body{height:100%;min-height:-webkit-fill-available;background:var(--bg);color:va
 /* BOT TYPES */
 .bot-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
 @media(max-width:320px){.bot-type-grid{grid-template-columns:1fr}}
-.bot-type-card{border:2px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s}
+.bot-type-card{border:2px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
 .bot-type-card:active,.bot-type-card.selected{border-color:var(--accent);background:rgba(124,58,237,.08)}
 .bot-type-icon{font-size:1.6rem;margin-bottom:6px}
 .bot-type-name{font-size:.82rem;font-weight:700}
@@ -201,14 +200,9 @@ table{width:100%;border-collapse:collapse;min-width:320px}
 th{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
 td{padding:10px 12px;border-bottom:1px solid rgba(30,30,48,.5);font-size:.82rem}
 tr:last-child td{border-bottom:none}
-/* Make admin action buttons stack better on mobile */
-@media(max-width:480px){
-  .icon-btn{padding:5px 6px;font-size:.65rem}
-  td{padding:8px 8px;font-size:.78rem}
-  th{padding:8px 8px;font-size:.58rem}
-}
+@media(max-width:480px){.icon-btn{padding:5px 6px;font-size:.65rem}td{padding:8px 8px;font-size:.78rem}th{padding:8px 8px;font-size:.58rem}}
 
-/* DEPLOY STEPS */
+/* DEPLOY */
 .deploy-steps{display:flex;align-items:center;margin-bottom:20px;gap:0}
 .deploy-step{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;min-width:60px}
 .deploy-step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--muted);transition:all .3s}
@@ -216,16 +210,25 @@ tr:last-child td{border-bottom:none}
 .deploy-step.done .deploy-step-dot{background:var(--success);border-color:var(--success);color:#fff}
 .deploy-step-line{flex:1;height:1px;background:var(--border);transition:background .3s;margin-bottom:16px}
 .deploy-step-line.done{background:var(--success)}
-/* Tier cards locked state */
-.bot-type-card.locked{opacity:.35;cursor:not-allowed}
-.bot-type-card.locked::after{content:'&#128274;';position:absolute;top:6px;right:8px;font-size:.8rem}
-.bot-type-card{position:relative}
+
+/* API KEY BANNER */
+.api-key-banner{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.api-key-banner-text{flex:1;min-width:200px}
+.api-key-banner-text strong{display:block;font-size:.85rem;color:var(--danger);margin-bottom:3px}
+.api-key-banner-text span{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+
+/* SETTINGS */
+.settings-section{margin-bottom:24px}
+.settings-section-title{font-family:var(--mono);font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.key-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.72rem;padding:4px 10px;border-radius:6px}
+.key-status.set{background:rgba(34,197,94,.1);color:var(--success);border:1px solid rgba(34,197,94,.3)}
+.key-status.missing{background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
 
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* ── DESKTOP (640px+) ── */
+/* DESKTOP */
 @media(min-width:640px){
   #app{flex-direction:row;flex-wrap:wrap}
   #topbar{width:100%;order:-1}
@@ -286,7 +289,7 @@ tr:last-child td{border-bottom:none}
     <div class="logo">DREX<span>.</span>PANEL</div>
     <div class="topbar-right">
       <div id="coin-display">&#129689; <span id="coin-count">0</span></div>
-      <div class="avatar" id="user-avatar">?</div>
+      <div class="avatar" id="user-avatar" onclick="navigate('settings')">?</div>
     </div>
   </div>
 
@@ -299,6 +302,8 @@ tr:last-child td{border-bottom:none}
     <div class="dnl">Earning</div>
     <div class="dni" onclick="navigate('afk')"><span class="dni-icon">&#128164;</span>AFK Farm</div>
     <div class="dni" onclick="navigate('transactions')"><span class="dni-icon">&#10227;</span>History</div>
+    <div class="dnl">Account</div>
+    <div class="dni" onclick="navigate('settings')"><span class="dni-icon">&#9881;</span>Settings</div>
     <div class="dnl" id="admin-dnl" style="display:none">Admin</div>
     <div class="dni hidden" id="admin-dni" onclick="navigate('admin')"><span class="dni-icon">&#128737;</span>Admin Panel</div>
     <div class="desk-bottom">
@@ -315,6 +320,15 @@ tr:last-child td{border-bottom:none}
       <div id="page-dashboard">
         <div class="page-header">
           <div><div class="page-title">Dashboard</div><div class="page-subtitle" id="dash-greeting">Welcome back!</div></div>
+        </div>
+        <!-- API Key warning banner (shown when key not set) -->
+        <div id="api-key-banner" class="api-key-banner hidden">
+          <span style="font-size:1.4rem">&#128274;</span>
+          <div class="api-key-banner-text">
+            <strong>Pterodactyl Client API Key Required</strong>
+            <span>Console, files & power controls need your panel key to work.</span>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="navigate('settings')">Set Key &rarr;</button>
         </div>
         <div class="stats-row">
           <div class="stat-card"><div class="stat-label">Coins</div><div class="stat-value" id="dash-coins" style="color:var(--accent3)">0</div><div class="stat-sub">balance</div></div>
@@ -341,8 +355,6 @@ tr:last-child td{border-bottom:none}
       <!-- CREATE / DEPLOY -->
       <div id="page-create" class="hidden">
         <div class="page-header"><div><div class="page-title">Deploy Bot</div><div class="page-subtitle">Pick a RAM plan</div></div></div>
-
-        <!-- Step indicator -->
         <div class="deploy-steps" id="deploy-steps" style="display:none">
           <div class="deploy-step active" id="dstep-1"><div class="deploy-step-dot">1</div><span>Configure</span></div>
           <div class="deploy-step-line" id="dline-1"></div>
@@ -350,8 +362,6 @@ tr:last-child td{border-bottom:none}
           <div class="deploy-step-line" id="dline-2"></div>
           <div class="deploy-step" id="dstep-3"><div class="deploy-step-dot">&#10003;</div><span>Done</span></div>
         </div>
-
-        <!-- TIER CARDS — hidden once form is open -->
         <div id="tier-grid-wrap">
           <div class="section-title">RAM Plan</div>
           <div class="bot-type-grid" id="tier-cards">
@@ -381,10 +391,7 @@ tr:last-child td{border-bottom:none}
             </div>
           </div>
         </div>
-
-        <!-- DEPLOY FORM — shown after tier is picked -->
         <div id="deploy-form" class="hidden">
-          <!-- Tier summary badge -->
           <div id="deploy-tier-badge" style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:18px">
             <span id="deploy-tier-ico" style="font-size:1.4rem">&#128187;</span>
             <div>
@@ -393,28 +400,81 @@ tr:last-child td{border-bottom:none}
             </div>
             <button class="btn btn-secondary btn-sm" onclick="closeDeploy()" style="margin-left:auto">&#8592; Change</button>
           </div>
-
           <div class="form-group">
             <label>Server Name</label>
             <input type="text" id="deploy-server-name" placeholder="my-awesome-bot" autocomplete="off" spellcheck="false"
               oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')">
             <div style="font-size:.68rem;color:var(--muted);margin-top:4px">Lowercase letters, numbers, hyphens only</div>
           </div>
-
-          <div style="background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.6">
-            &#9432; The server will be deployed automatically to your linked Pterodactyl account (<span id="deploy-ptero-user" style="color:var(--accent2)">your account</span>). No extra credentials needed.
-          </div>
-
           <div id="deploy-cost-line" style="font-family:var(--mono);font-size:.78rem;color:var(--accent3);margin-bottom:16px"></div>
-
           <button class="btn btn-primary btn-full" id="deploy-btn" onclick="doDeployServer()">&#128640; Deploy Server</button>
-
-          <!-- Success result card -->
           <div id="deploy-result" class="hidden" style="margin-top:18px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:18px">
             <div style="font-family:var(--mono);font-size:.68rem;color:var(--success);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">&#10003; Server Deployed!</div>
             <div id="deploy-result-rows"></div>
+            <div style="background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:12px;margin-top:14px;font-family:var(--mono);font-size:.72rem;line-height:1.7">
+              <strong style="color:var(--accent2)">&#9432; Next step — set your API key</strong><br>
+              <span style="color:var(--muted)">To use the console &amp; files, go to <strong style="color:var(--text)">Settings → API Key</strong> and paste your Pterodactyl Client API key.</span>
+            </div>
             <button class="btn btn-success btn-full" style="margin-top:14px" onclick="navigate('servers')">&#9881; View My Servers</button>
           </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="page-settings" class="hidden">
+        <div class="page-header"><div><div class="page-title">Settings</div><div class="page-subtitle">Account & API configuration</div></div></div>
+
+        <!-- API Key Section -->
+        <div class="card settings-section" style="margin-bottom:16px">
+          <div class="settings-section-title">Pterodactyl Client API Key</div>
+
+          <div style="background:rgba(6,182,212,.05);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:14px;margin-bottom:16px;font-family:var(--mono);font-size:.72rem;line-height:1.8;color:var(--muted)">
+            <strong style="color:var(--accent2)">Why is this needed?</strong><br>
+            Console, file manager, start/stop/restart all talk directly to your Pterodactyl server.<br>
+            Pterodactyl only allows this with <em>your own</em> client API key.<br><br>
+            <strong style="color:var(--text)">How to get your key:</strong><br>
+            1. Open your Pterodactyl panel<br>
+            2. Click your <strong style="color:var(--accent2)">avatar (top right)</strong><br>
+            3. Go to <strong style="color:var(--accent2)">API Credentials</strong><br>
+            4. Click <strong style="color:var(--accent2)">Create API Key</strong><br>
+            5. Copy the key (starts with <code style="color:var(--accent3)">ptlc_</code>) and paste it below
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Current status:</span>
+            <span id="key-status-badge" class="key-status missing">&#x2715; Not set</span>
+          </div>
+
+          <div class="form-group">
+            <label>Client API Key</label>
+            <input type="password" id="client-api-key-input" placeholder="ptlc_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false" style="font-family:var(--mono);letter-spacing:.05em">
+          </div>
+          <div id="key-save-error" style="font-family:var(--mono);font-size:.74rem;color:var(--danger);margin-bottom:10px;display:none"></div>
+          <button class="btn btn-primary btn-full" id="save-key-btn" onclick="saveClientKey()">&#128190; Save &amp; Verify Key</button>
+        </div>
+
+        <!-- Account Info -->
+        <div class="card settings-section">
+          <div class="settings-section-title">Account</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase">Username</span>
+              <span style="font-family:var(--mono);font-size:.82rem" id="settings-username">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase">Email</span>
+              <span style="font-family:var(--mono);font-size:.82rem" id="settings-email">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase">Role</span>
+              <span style="font-family:var(--mono);font-size:.82rem" id="settings-role">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase">Coins</span>
+              <span style="font-family:var(--mono);font-size:.82rem;color:var(--accent3)" id="settings-coins">—</span>
+            </div>
+          </div>
+          <button class="btn btn-danger btn-full" style="margin-top:16px" onclick="doLogout()">&#x2715; Logout</button>
         </div>
       </div>
 
@@ -458,7 +518,7 @@ tr:last-child td{border-bottom:none}
         <div class="section-title">Users</div>
         <div class="card" style="margin-bottom:16px">
           <div class="table-wrap">
-            <table><thead><tr><th>User</th><th>Coins</th><th>Role</th><th>Actions</th></tr></thead>
+            <table><thead><tr><th>User</th><th>Coins</th><th>Role</th><th>Key</th><th>Actions</th></tr></thead>
             <tbody id="admin-users-tbody"></tbody></table>
           </div>
         </div>
@@ -476,6 +536,12 @@ tr:last-child td{border-bottom:none}
         <div class="page-header">
           <div><div class="page-title" id="detail-server-name">Server</div><div class="page-subtitle" id="detail-server-type"></div></div>
           <button class="btn btn-secondary btn-sm" onclick="navigate('servers')">&larr; Back</button>
+        </div>
+        <!-- Inline key warning for server detail -->
+        <div id="server-key-warning" class="hidden" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span>&#128274;</span>
+          <span style="flex:1;font-family:var(--mono);font-size:.74rem;color:var(--muted)">Client API key not set — console &amp; files won't work.</span>
+          <button class="btn btn-danger btn-sm" onclick="navigate('settings')">Set Key</button>
         </div>
         <div class="power-row">
           <button class="btn btn-success" onclick="powerAction('start')">&#9654; Start</button>
@@ -501,7 +567,7 @@ tr:last-child td{border-bottom:none}
             <div class="file-path" id="file-path-display">/</div>
             <button class="btn btn-secondary btn-sm" onclick="fileGoUp()">&#8593; Up</button>
             <button class="btn btn-secondary btn-sm" onclick="loadFiles()">&#8634;</button>
-            <label class="btn btn-secondary btn-sm" style="cursor:pointer">&#8593; Upload<input type="file" style="display:none" onchange="uploadFile(this)"></label>
+            <label class="btn btn-secondary btn-sm" style="cursor:pointer">&#8593; Upload<input type="file" style="display:none" onchange="uploadFile(this)" multiple></label>
           </div>
           <div class="file-list" id="file-list"></div>
         </div>
@@ -526,6 +592,7 @@ tr:last-child td{border-bottom:none}
   <!-- MORE MENU -->
   <div id="more-menu" class="hidden">
     <div class="more-item" onclick="navigate('transactions');closeMore()">&#10227; History</div>
+    <div class="more-item" onclick="navigate('settings');closeMore()">&#9881; Settings</div>
     <div class="more-item hidden" id="admin-more-item" onclick="navigate('admin');closeMore()">&#128737; Admin Panel</div>
     <div class="more-item danger" onclick="doLogout()">&#x2715; Logout</div>
   </div>
@@ -541,300 +608,403 @@ tr:last-child td{border-bottom:none}
 <div id="toast-container"></div>
 
 <script>
-const API='https://drex-panel.onrender.com';
-let currentUser=null,currentServerId=null,currentFilePath='/',consoleWs=null;
-let afkInterval=null,afkSeconds=0,afkRunning=false,afkDailyLeft=500,moreOpen=false;
+const API = 'https://drex-panel.onrender.com'; // ← change this to your backend URL
+let currentUser = null, currentServerId = null, currentFilePath = '/', consoleWs = null;
+let afkInterval = null, afkSeconds = 0, afkRunning = false, afkDailyLeft = 500, moreOpen = false;
 
+// ── TOKEN ───────────────────────────────────────────────────────────────────
 function getToken(){ return localStorage.getItem('dp_token'); }
-function setToken(t){ localStorage.setItem('dp_token',t); }
+function setToken(t){ localStorage.setItem('dp_token', t); }
 function clearToken(){ localStorage.removeItem('dp_token'); }
 
 function authHeaders(){
-  const t=getToken();
+  const t = getToken();
   return t ? {'Content-Type':'application/json','Authorization':'Bearer '+t}
            : {'Content-Type':'application/json'};
 }
 
-async function api(method,path,body){
-  const opts={method,headers:authHeaders()};
-  if(body)opts.body=JSON.stringify(body);
-  const res=await fetch(API+path,opts);
-  const data=await res.json();
-  // Only auto-logout on 401 if we're NOT in a data-loading context
-  if(res.status===401){
-    clearToken();currentUser=null;showAuth();
-    throw new Error(data.error||'Session expired');
+// ── API HELPERS ──────────────────────────────────────────────────────────────
+async function api(method, path, body){
+  const opts = {method, headers: authHeaders()};
+  if(body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  const data = await res.json();
+  if(res.status === 401){
+    clearToken(); currentUser = null; showAuth();
+    throw new Error(data.error || 'Session expired');
+  }
+  // Surface needs_client_key errors
+  if(data.needs_client_key){
+    toast('Set your Pterodactyl API key in Settings first', 'error');
+    setTimeout(() => navigate('settings'), 1200);
+    throw new Error(data.error || 'Client key required');
   }
   return data;
 }
-async function apiWithWake(method,path,body){
-  for(let a=1;a<=4;a++){
+
+async function apiWithWake(method, path, body){
+  for(let a = 1; a <= 4; a++){
     try{
-      const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),25000);
-      const opts={method,headers:authHeaders(),signal:ctrl.signal};
-      if(body)opts.body=JSON.stringify(body);
-      const res=await fetch(API+path,opts);clearTimeout(t);
-      const data=await res.json();
-      if(res.status===401){clearToken();currentUser=null;showAuth();throw new Error(data.error||'Session expired');}
+      const ctrl = new AbortController(), t = setTimeout(()=>ctrl.abort(), 25000);
+      const opts = {method, headers: authHeaders(), signal: ctrl.signal};
+      if(body) opts.body = JSON.stringify(body);
+      const res = await fetch(API + path, opts); clearTimeout(t);
+      const data = await res.json();
+      if(res.status === 401){clearToken(); currentUser = null; showAuth(); throw new Error(data.error||'Session expired');}
+      if(data.needs_client_key){
+        toast('Set your Pterodactyl API key in Settings first','error');
+        setTimeout(() => navigate('settings'), 1200);
+        throw new Error(data.error||'Client key required');
+      }
       return data;
     }catch(e){
-      if(e.message==='Session expired'||e.message==='Not authenticated')throw e;
-      if(e.message?.toLowerCase().includes('cors'))throw new Error('CORS_ERROR');
-      if(a<4){toast(`Server waking up... (${a}/3)`,'info');await new Promise(r=>setTimeout(r,8000));}
+      if(['Session expired','Not authenticated','Client key required'].includes(e.message)) throw e;
+      if(e.message?.toLowerCase().includes('cors')) throw new Error('CORS_ERROR');
+      if(a < 4){toast(`Server waking up... (${a}/3)`, 'info'); await new Promise(r=>setTimeout(r, 8000));}
       else throw e;
     }
   }
 }
+
 function showAuth(){
   document.getElementById('auth-screen').classList.remove('hidden');
   document.getElementById('app').classList.add('hidden');
 }
-function toast(msg,type='info'){
-  const icons={success:'&#10003;',error:'&#x2715;',info:'i'};
-  const el=document.createElement('div');el.className=`toast ${type}`;
-  el.innerHTML=`<span>${icons[type]}</span> ${msg}`;
+
+function toast(msg, type='info'){
+  const icons={success:'&#10003;', error:'&#x2715;', info:'i'};
+  const el = document.createElement('div'); el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]}</span> ${msg}`;
   document.getElementById('toast-container').appendChild(el);
-  setTimeout(()=>el.remove(),3500);
+  setTimeout(()=>el.remove(), 3500);
 }
+
 function formatBytes(b){if(!b)return'0 B';const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));return(b/Math.pow(k,i)).toFixed(1)+' '+s[i];}
 function fmtDate(d){return d?new Date(d).toLocaleString():'—';}
-function statusBadge(s){const c={running:'status-running',stopped:'status-stopped',starting:'status-starting',installing:'status-installing',offline:'status-stopped'};return`<span class="status-badge ${c[s]||'status-stopped'}">${s||'unknown'}</span>`;}
+function statusBadge(s){
+  const c={running:'status-running',stopped:'status-stopped',starting:'status-starting',installing:'status-installing',offline:'status-stopped'};
+  return `<span class="status-badge ${c[s]||'status-stopped'}">${s||'unknown'}</span>`;
+}
 
+// ── MORE MENU ────────────────────────────────────────────────────────────────
 function toggleMore(){moreOpen=!moreOpen;document.getElementById('more-menu').classList.toggle('hidden',!moreOpen);}
 function closeMore(){moreOpen=false;document.getElementById('more-menu').classList.add('hidden');}
-document.addEventListener('click',e=>{if(moreOpen&&!e.target.closest('#more-menu')&&!e.target.closest('#nav-more'))closeMore();});
+document.addEventListener('click', e=>{if(moreOpen&&!e.target.closest('#more-menu')&&!e.target.closest('#nav-more'))closeMore();});
 
-function switchAuth(tab,btn){
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+function switchAuth(tab, btn){
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  document.getElementById('login-form').classList.toggle('hidden',tab!=='login');
-  document.getElementById('register-form').classList.toggle('hidden',tab!=='register');
+  if(btn) btn.classList.add('active');
+  document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
+  document.getElementById('register-form').classList.toggle('hidden', tab!=='register');
 }
+
 async function doLogin(){
-  const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-pass').value;
-  if(!email||!password)return toast('Fill in all fields','error');
-  const btn=document.querySelector('#login-form .btn');btn.disabled=true;btn.textContent='Connecting...';
+  const email = document.getElementById('login-email').value.trim(), password = document.getElementById('login-pass').value;
+  if(!email||!password) return toast('Fill in all fields','error');
+  const btn = document.querySelector('#login-form .btn'); btn.disabled=true; btn.textContent='Connecting...';
   try{
-    const data=await apiWithWake('POST','/api/auth/login',{email,password});
+    const data = await apiWithWake('POST', '/api/auth/login', {email, password});
     if(data.error){toast(data.error,'error');return;}
-    if(data.token)setToken(data.token);
-    currentUser=data.user;enterApp();
-  }catch(e){toast(e.message==='CORS_ERROR'?'CORS error — check FRONTEND_URL on Render':'Could not reach server, try again','error');}
-  finally{btn.disabled=false;btn.innerHTML='&rarr; Login';}
+    if(data.token) setToken(data.token);
+    currentUser = data.user; enterApp();
+  }catch(e){toast(e.message==='CORS_ERROR'?'CORS error — check backend CORS settings':'Could not reach server, try again','error');}
+  finally{btn.disabled=false; btn.innerHTML='&rarr; Login';}
 }
+
 async function doRegister(){
-  const username=document.getElementById('reg-username').value.trim(),email=document.getElementById('reg-email').value.trim(),password=document.getElementById('reg-pass').value;
-  if(!username||!email||!password)return toast('Fill in all fields','error');
-  const btn=document.querySelector('#register-form .btn');btn.disabled=true;btn.textContent='Creating...';
+  const username=document.getElementById('reg-username').value.trim(), email=document.getElementById('reg-email').value.trim(), password=document.getElementById('reg-pass').value;
+  if(!username||!email||!password) return toast('Fill in all fields','error');
+  const btn=document.querySelector('#register-form .btn'); btn.disabled=true; btn.textContent='Creating...';
   try{
-    const data=await apiWithWake('POST','/api/auth/register',{username,email,password});
+    const data = await apiWithWake('POST', '/api/auth/register', {username, email, password});
     if(data.error){toast(data.error,'error');return;}
-    if(data.token)setToken(data.token);
-    currentUser=data.user;enterApp();
+    if(data.token) setToken(data.token);
+    currentUser = data.user; enterApp();
     toast('Account created! Welcome \u{1F389}','success');
-  }catch(e){toast(e.message==='CORS_ERROR'?'CORS error — check FRONTEND_URL':'Could not reach server, try again','error');}
-  finally{btn.disabled=false;btn.innerHTML='&rarr; Create Account';}
+    // Prompt to set API key right after registration
+    setTimeout(()=>{
+      toast('Next: set your Pterodactyl API key in Settings','info');
+    }, 1500);
+  }catch(e){toast(e.message==='CORS_ERROR'?'CORS error':'Could not reach server','error');}
+  finally{btn.disabled=false; btn.innerHTML='&rarr; Create Account';}
 }
+
 async function doLogout(){
-  clearToken();
-  currentUser=null;
-  showAuth();
+  clearToken(); currentUser = null; showAuth();
 }
+
 async function checkSession(){
-  if(!getToken())return;
-  try{const d=await api('GET','/api/auth/me');if(d.user){currentUser=d.user;enterApp();}}
-  catch(e){clearToken();}
+  if(!getToken()) return;
+  try{
+    const d = await api('GET', '/api/auth/me');
+    if(d.user){currentUser=d.user; enterApp();}
+  }catch(e){clearToken();}
 }
 
 function updateCoins(v){
-  const val=v??currentUser?.coins??0;
-  document.getElementById('coin-count').textContent=val;
-  document.getElementById('desk-coins').textContent=val;
-  document.getElementById('dash-coins').textContent=val;
+  const val = v ?? currentUser?.coins ?? 0;
+  document.getElementById('coin-count').textContent = val;
+  document.getElementById('desk-coins').textContent = val;
+  document.getElementById('dash-coins').textContent = val;
 }
+
 function enterApp(){
   document.getElementById('auth-screen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
-  document.getElementById('user-avatar').textContent=currentUser.username[0].toUpperCase();
+  document.getElementById('user-avatar').textContent = currentUser.username[0].toUpperCase();
   updateCoins();
-  if(currentUser.role==='admin'){
+  if(currentUser.role === 'admin'){
     document.getElementById('admin-more-item').classList.remove('hidden');
-    document.getElementById('admin-dnl').style.display='block';
+    document.getElementById('admin-dnl').style.display = 'block';
     document.getElementById('admin-dni').classList.remove('hidden');
   }
+  // Show API key banner if key not set
+  const hasBanner = document.getElementById('api-key-banner');
+  if(hasBanner) hasBanner.classList.toggle('hidden', !!currentUser.has_client_key);
+
   navigate('dashboard');
 }
 
-const pages=['dashboard','servers','create','afk','transactions','admin','server-detail'];
-const navMap={dashboard:'nav-dashboard',servers:'nav-servers',create:'nav-create',afk:'nav-afk'};
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+const pages = ['dashboard','servers','create','afk','transactions','admin','server-detail','settings'];
+const navMap = {dashboard:'nav-dashboard', servers:'nav-servers', create:'nav-create', afk:'nav-afk'};
+
 function navigate(page){
   pages.forEach(p=>document.getElementById('page-'+p).classList.add('hidden'));
   document.getElementById('page-'+page).classList.remove('hidden');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  if(navMap[page])document.getElementById(navMap[page])?.classList.add('active');
+  if(navMap[page]) document.getElementById(navMap[page])?.classList.add('active');
   document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
   document.querySelector(`.dni[onclick*="'${page}'"]`)?.classList.add('active');
-  document.getElementById('main').scrollTop=0;
-  if(page==='dashboard')loadDashboard();
-  if(page==='servers')loadServers();
-  if(page==='create'){renderTierCards();closeDeploy();}
-  if(page==='transactions')loadTransactions();
-  if(page==='admin')loadAdmin();
-  if(page==='afk')loadAFKPage();
+  document.getElementById('main').scrollTop = 0;
+  if(page==='dashboard') loadDashboard();
+  if(page==='servers') loadServers();
+  if(page==='create'){renderTierCards(); closeDeploy();}
+  if(page==='transactions') loadTransactions();
+  if(page==='admin') loadAdmin();
+  if(page==='afk') loadAFKPage();
+  if(page==='settings') loadSettings();
 }
 
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
 async function loadDashboard(){
-  document.getElementById('dash-greeting').textContent=`Welcome, ${currentUser.username}!`;
+  document.getElementById('dash-greeting').textContent = `Welcome, ${currentUser.username}!`;
   updateCoins();
+  // Update banner
+  const banner = document.getElementById('api-key-banner');
+  if(banner) banner.classList.toggle('hidden', !!currentUser.has_client_key);
+
   try{
-    const data=await api('GET','/api/servers');const servers=data.servers||[];
-    document.getElementById('dash-running').textContent=servers.filter(s=>s.status==='running').length;
-    document.getElementById('dash-total').textContent=servers.length;
-    document.getElementById('dash-servers').innerHTML=servers.length===0
+    const data = await api('GET', '/api/servers'); const servers = data.servers||[];
+    document.getElementById('dash-running').textContent = servers.filter(s=>s.status==='running').length;
+    document.getElementById('dash-total').textContent = servers.length;
+    document.getElementById('dash-servers').innerHTML = servers.length===0
       ?`<div class="empty-state"><div class="empty-icon">&#129302;</div><p>No servers yet</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" onclick="navigate('servers');setTimeout(showImportServer,100)">&#128279; Import</button><button class="btn btn-primary btn-sm" onclick="navigate('create')">&#xFF0B; Deploy</button></div></div>`
       :servers.slice(0,4).map(serverCard).join('');
+    // AFK earned today
+    try{
+      const afk = await api('GET', '/api/afk/stats');
+      document.getElementById('dash-afk').textContent = afk.todayEarned || 0;
+      afkDailyLeft = afk.maxDaily - (afk.todayEarned||0);
+    }catch{}
   }catch(e){toast('Could not load servers','error');}
 }
 
-function serverCard(s){return`<div class="server-card" onclick="openServer('${s.server_id}','${s.server_name}','${s.bot_type}')">
-  <div class="server-card-header"><div><div class="server-name">${s.server_name}</div><div class="server-type">${s.bot_type}</div></div>${statusBadge(s.status)}</div>
-  <div class="server-stats">
-    <div class="server-stat"><div class="server-stat-val">${s.memory}MB</div><div class="server-stat-key">RAM</div></div>
-    <div class="server-stat"><div class="server-stat-val">${s.disk}MB</div><div class="server-stat-key">Disk</div></div>
-    <div class="server-stat"><div class="server-stat-val">${s.cpu}%</div><div class="server-stat-key">CPU</div></div>
-  </div>
-  <div class="server-actions" onclick="event.stopPropagation()">
-    <button class="btn btn-success" onclick="quickPower('${s.server_id}','start')">&#9654; Start</button>
-    <button class="btn btn-danger" onclick="quickPower('${s.server_id}','stop')">&#9632; Stop</button>
-    <button class="btn btn-warning" onclick="quickPower('${s.server_id}','restart')">&#8634; Restart</button>
-  </div></div>`;}
+// ── SERVER CARDS ──────────────────────────────────────────────────────────────
+function serverCard(s){
+  return `<div class="server-card" onclick="openServer('${s.server_id}','${s.server_name}','${s.bot_type}')">
+    <div class="server-card-header"><div><div class="server-name">${s.server_name}</div><div class="server-type">${s.bot_type}</div></div>${statusBadge(s.status)}</div>
+    <div class="server-stats">
+      <div class="server-stat"><div class="server-stat-val">${s.memory}MB</div><div class="server-stat-key">RAM</div></div>
+      <div class="server-stat"><div class="server-stat-val">${s.disk}MB</div><div class="server-stat-key">Disk</div></div>
+      <div class="server-stat"><div class="server-stat-val">${s.cpu}%</div><div class="server-stat-key">CPU</div></div>
+    </div>
+    <div class="server-actions" onclick="event.stopPropagation()">
+      <button class="btn btn-success" onclick="quickPower('${s.server_id}','start')">&#9654; Start</button>
+      <button class="btn btn-danger" onclick="quickPower('${s.server_id}','stop')">&#9632; Stop</button>
+      <button class="btn btn-warning" onclick="quickPower('${s.server_id}','restart')">&#8634; Restart</button>
+    </div></div>`;
+}
 
 async function loadServers(){
-  document.getElementById('servers-grid').innerHTML='<div class="empty-state"><div class="spinner"></div></div>';
+  document.getElementById('servers-grid').innerHTML = '<div class="empty-state"><div class="spinner"></div></div>';
   try{
-    const data=await api('GET','/api/servers');const servers=data.servers||[];
-    document.getElementById('servers-grid').innerHTML=servers.length===0
-      ?`<div class="empty-state">
-          <div class="empty-icon">&#129302;</div>
-          <p>No servers linked yet</p>
-          <p style="font-size:.75rem;color:var(--muted);margin-bottom:16px;max-width:260px;margin-left:auto;margin-right:auto">Create a server on your Pterodactyl panel first, then import it here using its Server ID.</p>
+    const data = await api('GET', '/api/servers'); const servers = data.servers||[];
+    document.getElementById('servers-grid').innerHTML = servers.length===0
+      ?`<div class="empty-state"><div class="empty-icon">&#129302;</div><p>No servers linked yet</p>
           <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px;margin:0 auto">
             <button class="btn btn-primary btn-full" onclick="showImportServer()">&#128279; Import Existing Server</button>
-            <button class="btn btn-secondary btn-full" onclick="navigate('create')">&#FF0B; Deploy New Bot</button>
-          </div>
-        </div>`
+            <button class="btn btn-secondary btn-full" onclick="navigate('create')">&#xFF0B; Deploy New Bot</button>
+          </div></div>`
       :servers.map(serverCard).join('');
   }catch(e){document.getElementById('servers-grid').innerHTML=`<div class="empty-state"><p style="color:var(--danger)">Failed to load</p></div>`;}
 }
 
-async function quickPower(id,action){
-  try{const data=await api('POST',`/api/servers/${id}/power`,{action});if(data.error)toast(data.error,'error');else{toast(`${action} sent`,'success');loadServers();}}
-  catch(e){toast('Network error','error');}
+async function quickPower(id, action){
+  try{
+    const data = await api('POST', `/api/servers/${id}/power`, {action});
+    if(data.error) toast(data.error,'error');
+    else{toast(`${action} sent`,'success'); loadServers();}
+  }catch(e){if(!e.message.includes('key')) toast('Network error','error');}
 }
 
-function openServer(id,name,type){
-  currentServerId=id;currentFilePath='/';
-  document.getElementById('detail-server-name').textContent=name;
-  document.getElementById('detail-server-type').textContent=type;
+function openServer(id, name, type){
+  currentServerId=id; currentFilePath='/';
+  document.getElementById('detail-server-name').textContent = name;
+  document.getElementById('detail-server-type').textContent = type;
+  // Show warning if no key
+  const warn = document.getElementById('server-key-warning');
+  if(warn) warn.classList.toggle('hidden', !!currentUser.has_client_key);
   navigate('server-detail');
-  switchServerTab('console',document.getElementById('tab-console-btn'));
+  switchServerTab('console', document.getElementById('tab-console-btn'));
   connectConsole();
 }
 
-function switchServerTab(tab,btn){
+function switchServerTab(tab, btn){
   ['console','files','info'].forEach(t=>{
-    document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab);
-    document.getElementById('tab-'+t+'-btn')?.classList.toggle('active',t===tab);
+    document.getElementById('tab-'+t).classList.toggle('hidden', t!==tab);
+    document.getElementById('tab-'+t+'-btn')?.classList.toggle('active', t===tab);
   });
-  if(tab==='files')loadFiles();
-  if(tab==='info')loadServerInfo();
+  if(tab==='files') loadFiles();
+  if(tab==='info') loadServerInfo();
 }
 
+// ── CONSOLE ───────────────────────────────────────────────────────────────────
 function connectConsole(){
   if(consoleWs){consoleWs.close();consoleWs=null;}
-  document.getElementById('console-output').innerHTML='';
+  document.getElementById('console-output').innerHTML = '';
+
+  if(!currentUser.has_client_key){
+    appendConsole('⚠ Client API key not set. Go to Settings → API Key to fix this.','error');
+    appendConsole('Console requires your own Pterodactyl client key (ptlc_...).','warn');
+    return;
+  }
+
   appendConsole('Connecting...','info');
-  api('GET',`/api/servers/${currentServerId}/console`).then(data=>{
+  api('GET', `/api/servers/${currentServerId}/console`).then(data=>{
     if(data.error){appendConsole('Error: '+data.error,'error');return;}
-    const url=`${API.replace('https','wss').replace('http','ws')}/ws?serverId=${currentServerId}&token=${encodeURIComponent(data.token)}&socket=${encodeURIComponent(data.socket)}`;
-    consoleWs=new WebSocket(url);
-    consoleWs.onopen=()=>appendConsole('Connected ✓','success');
-    consoleWs.onmessage=e=>{try{const m=JSON.parse(e.data);if(m.event==='console output'&&m.args)m.args.forEach(l=>appendConsole(l));}catch{appendConsole(e.data);}};
-    consoleWs.onerror=()=>appendConsole('WebSocket error','error');
-    consoleWs.onclose=()=>appendConsole('Connection closed','warn');
-  }).catch(err=>appendConsole('Failed: '+err.message,'error'));
-}
-function appendConsole(line,cls=''){
-  const out=document.getElementById('console-output');
-  const d=document.createElement('div');d.className='console-line '+cls;d.textContent=line;
-  out.appendChild(d);out.scrollTop=out.scrollHeight;
-}
-function sendConsoleCmd(){
-  const inp=document.getElementById('console-cmd'),cmd=inp.value.trim();if(!cmd)return;inp.value='';
-  if(consoleWs&&consoleWs.readyState===1){consoleWs.send(JSON.stringify({event:'send command',command:cmd}));appendConsole('> '+cmd,'info');}
-  else api('POST',`/api/servers/${currentServerId}/command`,{command:cmd}).then(d=>{if(d.error)toast(d.error,'error');else appendConsole('> '+cmd,'info');});
-}
-async function powerAction(action){
-  try{const data=await api('POST',`/api/servers/${currentServerId}/power`,{action});if(data.error)toast(data.error,'error');else toast(`${action} sent`,'success');}
-  catch(e){toast('Network error','error');}
+    const url = `${API.replace('https','wss').replace('http','ws')}/ws?serverId=${currentServerId}&token=${encodeURIComponent(data.token)}&socket=${encodeURIComponent(data.socket)}`;
+    consoleWs = new WebSocket(url);
+    consoleWs.onopen = ()=>appendConsole('Connected ✓','success');
+    consoleWs.onmessage = e=>{
+      try{
+        const m = JSON.parse(e.data);
+        if(m.event==='console output'&&m.args) m.args.forEach(l=>appendConsole(l));
+        else if(m.event==='status') appendConsole('[status] '+m.args?.[0],'info');
+      }catch{appendConsole(e.data);}
+    };
+    consoleWs.onerror = ()=>appendConsole('WebSocket error','error');
+    consoleWs.onclose = ()=>appendConsole('Connection closed','warn');
+  }).catch(err=>{
+    if(!err.message.includes('key')) appendConsole('Failed: '+err.message,'error');
+  });
 }
 
-async function loadFiles(){
-  document.getElementById('file-path-display').textContent=currentFilePath;
-  document.getElementById('file-list').innerHTML='<div style="padding:20px;text-align:center"><div class="spinner"></div></div>';
+function appendConsole(line, cls=''){
+  const out = document.getElementById('console-output');
+  const d = document.createElement('div'); d.className='console-line '+cls; d.textContent=line;
+  out.appendChild(d); out.scrollTop=out.scrollHeight;
+}
+
+function sendConsoleCmd(){
+  const inp = document.getElementById('console-cmd'), cmd = inp.value.trim();
+  if(!cmd) return; inp.value = '';
+  if(!currentUser.has_client_key){toast('Set your API key in Settings first','error');return;}
+  if(consoleWs&&consoleWs.readyState===1){
+    consoleWs.send(JSON.stringify({event:'send command', command:cmd}));
+    appendConsole('> '+cmd,'info');
+  } else {
+    api('POST', `/api/servers/${currentServerId}/command`, {command:cmd})
+      .then(d=>{if(d.error)toast(d.error,'error');else appendConsole('> '+cmd,'info');})
+      .catch(e=>{if(!e.message.includes('key'))toast('Network error','error');});
+  }
+}
+
+async function powerAction(action){
+  if(!currentUser.has_client_key){toast('Set your Pterodactyl API key in Settings first','error');navigate('settings');return;}
   try{
-    const data=await api('GET',`/api/servers/${currentServerId}/files?directory=${encodeURIComponent(currentFilePath)}`);
+    const data = await api('POST', `/api/servers/${currentServerId}/power`, {action});
+    if(data.error) toast(data.error,'error'); else toast(`${action} sent`,'success');
+  }catch(e){if(!e.message.includes('key'))toast('Network error','error');}
+}
+
+// ── FILES ─────────────────────────────────────────────────────────────────────
+async function loadFiles(){
+  document.getElementById('file-path-display').textContent = currentFilePath;
+  if(!currentUser.has_client_key){
+    document.getElementById('file-list').innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:.78rem;color:var(--danger)">&#128274; API key required — go to Settings</div>';
+    return;
+  }
+  document.getElementById('file-list').innerHTML = '<div style="padding:20px;text-align:center"><div class="spinner"></div></div>';
+  try{
+    const data = await api('GET', `/api/servers/${currentServerId}/files?directory=${encodeURIComponent(currentFilePath)}`);
     if(data.error){toast(data.error,'error');return;}
-    const files=data.files||[];
-    document.getElementById('file-list').innerHTML=files.length===0
+    const files = data.files||[];
+    document.getElementById('file-list').innerHTML = files.length===0
       ?'<div style="padding:20px;text-align:center;color:var(--muted);font-size:.85rem">Empty directory</div>'
       :files.map(f=>`<div class="file-row">
           <span class="file-icon">${f.is_file?'&#128196;':'&#128193;'}</span>
-          <span class="file-name" onclick="${f.is_file?`editFile('${f.name}')`:`cdDir('${f.name}')`}">${f.name}</span>
+          <span class="file-name" onclick="${f.is_file?`editFile('${f.name.replace(/'/g,"\\'")}')`:` cdDir('${f.name.replace(/'/g,"\\'")}') `}">${f.name}</span>
           <span class="file-size">${f.is_file?formatBytes(f.size):''}</span>
           <div class="file-btns">
-            ${f.is_file?`<button class="icon-btn" onclick="editFile('${f.name}')">Edit</button>`:''}
-            <button class="icon-btn" style="color:var(--danger)" onclick="deleteFile('${f.name}')">Del</button>
+            ${f.is_file?`<button class="icon-btn" onclick="editFile('${f.name.replace(/'/g,"\\'")}')">Edit</button>`:''}
+            <button class="icon-btn" style="color:var(--danger)" onclick="deleteFile('${f.name.replace(/'/g,"\\'")}')">Del</button>
           </div></div>`).join('');
-  }catch(e){toast('Failed to load files','error');}
+  }catch(e){if(!e.message.includes('key'))toast('Failed to load files','error');}
 }
-function cdDir(name){currentFilePath=(currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name;loadFiles();}
-function fileGoUp(){const p=currentFilePath.split('/').filter(Boolean);p.pop();currentFilePath='/'+p.join('/');loadFiles();}
+
+function cdDir(name){currentFilePath=(currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name; loadFiles();}
+function fileGoUp(){const p=currentFilePath.split('/').filter(Boolean); p.pop(); currentFilePath='/'+p.join('/'); loadFiles();}
+
 async function editFile(name){
-  const path=(currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name;
+  const path = (currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name;
   try{
-    const data=await api('GET',`/api/servers/${currentServerId}/files/content?file=${encodeURIComponent(path)}`);
+    const data = await api('GET', `/api/servers/${currentServerId}/files/content?file=${encodeURIComponent(path)}`);
     if(data.error){toast(data.error,'error');return;}
     showModal(`<div class="modal-drag"></div><h2>&#9999; ${name}</h2>
       <textarea class="code-editor" id="file-editor-content">${(data.content||'').replace(/</g,'&lt;')}</textarea>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveFile('${path}')">&#128190; Save</button>
+        <button class="btn btn-primary" onclick="saveFile('${path.replace(/'/g,"\\'")}')">&#128190; Save</button>
       </div>`);
-  }catch(e){toast('Failed to open file','error');}
+  }catch(e){if(!e.message.includes('key'))toast('Failed to open file','error');}
 }
+
 async function saveFile(path){
-  const content=document.getElementById('file-editor-content').value;
-  const data=await api('POST',`/api/servers/${currentServerId}/files/write`,{file:path,content});
-  if(data.error)toast(data.error,'error');else{toast('File saved','success');closeModal();}
+  const content = document.getElementById('file-editor-content').value;
+  // Backend accepts both 'path' and 'file' param
+  const data = await api('POST', `/api/servers/${currentServerId}/files/write`, {file:path, content});
+  if(data.error) toast(data.error,'error'); else{toast('File saved','success'); closeModal();}
 }
+
 async function deleteFile(name){
-  const path=(currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name;
-  if(!confirm(`Delete ${name}?`))return;
-  const data=await api('DELETE',`/api/servers/${currentServerId}/files`,{files:[path]});
-  if(data.error)toast(data.error,'error');else{toast('Deleted','success');loadFiles();}
+  const path = (currentFilePath.endsWith('/')?currentFilePath:currentFilePath+'/')+name;
+  if(!confirm(`Delete ${name}?`)) return;
+  const data = await api('DELETE', `/api/servers/${currentServerId}/files`, {files:[path]});
+  if(data.error) toast(data.error,'error'); else{toast('Deleted','success'); loadFiles();}
 }
+
 async function uploadFile(input){
-  const file=input.files[0];if(!file)return;
-  const fd=new FormData();fd.append('file',file);
-  const t=getToken();
-  const res=await fetch(`${API}/api/servers/${currentServerId}/files/upload?directory=${encodeURIComponent(currentFilePath)}`,{method:'POST',headers:t?{'Authorization':'Bearer '+t}:{},body:fd});
-  const data=await res.json();
-  if(data.error)toast(data.error,'error');else{toast('Uploaded!','success');loadFiles();}
+  const files = input.files; if(!files.length) return;
+  const fd = new FormData();
+  for(const f of files) fd.append('files', f);
+  const t = getToken();
+  try{
+    const res = await fetch(`${API}/api/servers/${currentServerId}/files/upload?directory=${encodeURIComponent(currentFilePath)}`,
+      {method:'POST', headers:t?{'Authorization':'Bearer '+t}:{}, body:fd});
+    const data = await res.json();
+    if(data.error) toast(data.error,'error'); else{toast('Uploaded!','success'); loadFiles();}
+  }catch(e){toast('Upload failed','error');}
+  input.value='';
 }
+
 async function loadServerInfo(){
   try{
-    const[res,info]=await Promise.all([api('GET',`/api/servers/${currentServerId}/resources`),api('GET',`/api/servers/${currentServerId}`)]);
+    const[res,info]=await Promise.all([
+      api('GET', `/api/servers/${currentServerId}/resources`),
+      api('GET', `/api/servers/${currentServerId}`)
+    ]);
     const r=res.resources||{};
     document.getElementById('server-resources').innerHTML=`<div class="section-title">Live Resources</div>
       <div class="grid-2" style="gap:14px">
@@ -855,17 +1025,69 @@ async function loadServerInfo(){
   }catch(e){toast('Failed to load info','error');}
 }
 
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function loadSettings(){
+  if(!currentUser) return;
+  document.getElementById('settings-username').textContent = currentUser.username;
+  document.getElementById('settings-email').textContent = currentUser.email||'—';
+  document.getElementById('settings-role').textContent = currentUser.role||'user';
+  document.getElementById('settings-coins').textContent = currentUser.coins||0;
+  updateKeyBadge(currentUser.has_client_key);
+}
+
+function updateKeyBadge(hasKey){
+  const badge = document.getElementById('key-status-badge');
+  if(!badge) return;
+  badge.className = 'key-status '+(hasKey?'set':'missing');
+  badge.innerHTML = hasKey ? '&#10003; Set &amp; verified' : '&#x2715; Not set';
+}
+
+async function saveClientKey(){
+  const key = document.getElementById('client-api-key-input').value.trim();
+  const errEl = document.getElementById('key-save-error');
+  errEl.style.display = 'none';
+
+  if(!key){errEl.textContent='Please paste your API key'; errEl.style.display='block'; return;}
+  if(!key.startsWith('ptlc_')){
+    errEl.textContent='Key must start with "ptlc_" — get it from your panel → Account → API Credentials';
+    errEl.style.display='block'; return;
+  }
+
+  const btn = document.getElementById('save-key-btn');
+  btn.disabled=true; btn.textContent='Verifying...';
+
+  try{
+    const data = await api('PUT', '/api/user/client-key', {clientApiKey: key});
+    if(data.error){errEl.textContent=data.error; errEl.style.display='block'; return;}
+    toast('API key saved and verified! ✓','success');
+    currentUser.has_client_key = true;
+    updateKeyBadge(true);
+    document.getElementById('client-api-key-input').value='';
+    // Hide the dashboard banner
+    const banner = document.getElementById('api-key-banner');
+    if(banner) banner.classList.add('hidden');
+    // Hide server detail warning too
+    const warn = document.getElementById('server-key-warning');
+    if(warn) warn.classList.add('hidden');
+  }catch(e){
+    errEl.textContent = e.message||'Failed to save key';
+    errEl.style.display='block';
+  }finally{
+    btn.disabled=false; btn.innerHTML='&#128190; Save &amp; Verify Key';
+  }
+}
+
+// ── IMPORT SERVER ─────────────────────────────────────────────────────────────
 function showImportServer(){
   showModal(`<div class="modal-drag"></div>
     <h2>&#128279; Import Pterodactyl Server</h2>
     <p style="font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-bottom:18px;line-height:1.5">
       Enter the <strong style="color:var(--accent2)">Server Identifier</strong> from your Pterodactyl panel.<br>
-      You can find it in the panel URL:<br>
-      <span style="color:var(--accent3)">/server/<strong>abc12345</strong></span>
+      Find it in the panel URL: <span style="color:var(--accent3)">/server/<strong>abc12345</strong></span>
     </p>
     <div class="form-group">
       <label>Server Identifier</label>
-      <input type="text" id="import-server-id" placeholder="e.g. abc12345" autocomplete="off" spellcheck="false" style="font-family:var(--mono);letter-spacing:.05em">
+      <input type="text" id="import-server-id" placeholder="e.g. abc12345" autocomplete="off" style="font-family:var(--mono);letter-spacing:.05em">
     </div>
     <div class="form-group">
       <label>Display Name</label>
@@ -887,7 +1109,7 @@ function showImportServer(){
       <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" id="import-btn" onclick="doImportServer()">&#128279; Import</button>
     </div>`);
-  setTimeout(()=>document.getElementById('import-server-id')?.focus(),100);
+  setTimeout(()=>document.getElementById('import-server-id')?.focus(), 100);
 }
 
 async function doImportServer(){
@@ -896,34 +1118,31 @@ async function doImportServer(){
   const botType=document.getElementById('import-server-type').value;
   const errEl=document.getElementById('import-error');
   errEl.style.display='none';
-  if(!serverId){errEl.textContent='Server ID is required';errEl.style.display='block';return;}
-  if(!displayName){errEl.textContent='Display name is required';errEl.style.display='block';return;}
+  if(!serverId){errEl.textContent='Server ID is required'; errEl.style.display='block'; return;}
+  if(!displayName){errEl.textContent='Display name is required'; errEl.style.display='block'; return;}
   const btn=document.getElementById('import-btn');
-  btn.disabled=true;btn.textContent='Importing...';
+  btn.disabled=true; btn.textContent='Importing...';
   try{
     const data=await api('POST','/api/servers/import',{serverId,name:displayName,botType});
-    if(data.error){errEl.textContent=data.error;errEl.style.display='block';btn.disabled=false;btn.textContent='&#128279; Import';return;}
+    if(data.error){errEl.textContent=data.error; errEl.style.display='block'; btn.disabled=false; btn.textContent='&#128279; Import'; return;}
     toast('Server imported successfully!','success');
-    closeModal();
-    navigate('servers');
-  }catch(e){errEl.textContent='Import failed: '+e.message;errEl.style.display='block';btn.disabled=false;btn.textContent='&#128279; Import';}
+    closeModal(); navigate('servers');
+  }catch(e){errEl.textContent='Import failed: '+e.message; errEl.style.display='block'; btn.disabled=false; btn.textContent='&#128279; Import';}
 }
 
-// ── DEPLOY TIERS ──────────────────────────────────────────────────────────────
+// ── DEPLOY ────────────────────────────────────────────────────────────────────
 const DEPLOY_TIERS={
-  1:{ico:'&#128187;',name:'5 GB RAM',  spec:'Standard · 50% CPU',     cost:10,  ram:'5gb'},
-  2:{ico:'&#9889;',  name:'10 GB RAM', spec:'Enhanced · 50% CPU',     cost:50,  ram:'10gb'},
-  3:{ico:'&#128640;',name:'Unlimited', spec:'No limits · Full power',  cost:100, ram:'unli'},
-  4:{ico:'&#128081;',name:'Admin',     spec:'Full Pterodactyl access', cost:250, ram:'admin'}
+  1:{ico:'&#128187;', name:'5 GB RAM',  spec:'Standard · 50% CPU',     cost:10,  ram:'5gb'},
+  2:{ico:'&#9889;',   name:'10 GB RAM', spec:'Enhanced · 50% CPU',     cost:50,  ram:'10gb'},
+  3:{ico:'&#128640;', name:'Unlimited', spec:'No limits · Full power',  cost:100, ram:'unli'},
+  4:{ico:'&#128081;', name:'Admin',     spec:'Full Pterodactyl access', cost:250, ram:'admin'}
 };
-let activeTier=null;
+let activeTier = null;
 
 function renderTierCards(){
-  const bal=currentUser?.coins||0;
-  const isAdmin=currentUser?.role==='admin';
+  const bal = currentUser?.coins||0, isAdmin = currentUser?.role==='admin';
   for(let i=1;i<=4;i++){
-    const c=document.getElementById('tier-card-'+i);
-    if(!c)continue;
+    const c=document.getElementById('tier-card-'+i); if(!c) continue;
     const canAfford=isAdmin||bal>=DEPLOY_TIERS[i].cost;
     c.style.opacity=canAfford?'1':'0.4';
     c.style.cursor=canAfford?'pointer':'not-allowed';
@@ -932,23 +1151,12 @@ function renderTierCards(){
 }
 
 function pickTier(n){
-  activeTier=n;
-  const tier=DEPLOY_TIERS[n];
-  // Highlight selected
-  for(let i=1;i<=4;i++){
-    const c=document.getElementById('tier-card-'+i);
-    if(c)c.classList.toggle('selected',i===n);
-  }
-  // Fill badge
+  activeTier=n; const tier=DEPLOY_TIERS[n];
+  for(let i=1;i<=4;i++){const c=document.getElementById('tier-card-'+i); if(c)c.classList.toggle('selected',i===n);}
   document.getElementById('deploy-tier-ico').innerHTML=tier.ico;
   document.getElementById('deploy-tier-name').textContent=tier.name;
   document.getElementById('deploy-tier-spec').textContent=`${tier.spec} · ${tier.cost} coins`;
-  document.getElementById('deploy-cost-line').textContent=
-    `Cost: ${tier.cost} coins  —  Your balance: ${currentUser?.coins||0} coins`;
-  // Show ptero username
-  const ptEl=document.getElementById('deploy-ptero-user');
-  if(ptEl)ptEl.textContent=currentUser?.username||currentUser?.name||'your account';
-  // Reset and show form
+  document.getElementById('deploy-cost-line').textContent=`Cost: ${tier.cost} coins  —  Your balance: ${currentUser?.coins||0} coins`;
   document.getElementById('deploy-server-name').value='';
   document.getElementById('deploy-result').classList.add('hidden');
   document.getElementById('deploy-btn').disabled=false;
@@ -961,51 +1169,40 @@ function pickTier(n){
 
 function closeDeploy(){
   activeTier=null;
-  for(let i=1;i<=4;i++){const c=document.getElementById('tier-card-'+i);if(c)c.classList.remove('selected');}
+  for(let i=1;i<=4;i++){const c=document.getElementById('tier-card-'+i); if(c)c.classList.remove('selected');}
   document.getElementById('deploy-form').classList.add('hidden');
   document.getElementById('deploy-steps').style.display='none';
 }
 
 function setDeployStep(n){
   for(let i=1;i<=3;i++){
-    const s=document.getElementById('dstep-'+i);if(!s)continue;
+    const s=document.getElementById('dstep-'+i); if(!s)continue;
     s.classList.remove('active','done');
-    if(i<n)s.classList.add('done');
-    else if(i===n)s.classList.add('active');
+    if(i<n)s.classList.add('done'); else if(i===n)s.classList.add('active');
   }
-  for(let i=1;i<=2;i++){
-    const l=document.getElementById('dline-'+i);
-    if(l)l.classList.toggle('done',i<n);
-  }
+  for(let i=1;i<=2;i++){const l=document.getElementById('dline-'+i); if(l)l.classList.toggle('done',i<n);}
 }
 
 async function doDeployServer(){
-  if(!activeTier)return toast('Select a plan first','error');
+  if(!activeTier) return toast('Select a plan first','error');
   const name=document.getElementById('deploy-server-name').value.trim();
-  if(!name)return toast('Enter a server name','error');
-  if(!/^[a-z0-9-]{2,30}$/.test(name))return toast('Name: 2–30 lowercase letters, numbers, hyphens','error');
+  if(!name) return toast('Enter a server name','error');
+  if(!/^[a-z0-9-]{2,30}$/.test(name)) return toast('Name: 2–30 lowercase letters, numbers, hyphens','error');
   const tier=DEPLOY_TIERS[activeTier];
   const btn=document.getElementById('deploy-btn');
-  btn.disabled=true;btn.textContent='Deploying...';
-  setDeployStep(2);
+  btn.disabled=true; btn.textContent='Deploying...'; setDeployStep(2);
   try{
     const data=await api('POST','/api/servers',{name,ramType:tier.ram});
-    if(data.error){
-      setDeployStep(1);btn.disabled=false;btn.innerHTML='&#128640; Deploy Server';
-      return toast(data.error,'error');
-    }
-    // Update coin display
-    if(data.newBalance!==undefined)currentUser.coins=data.newBalance;
+    if(data.error){setDeployStep(1); btn.disabled=false; btn.innerHTML='&#128640; Deploy Server'; return toast(data.error,'error');}
+    if(data.newBalance!==undefined) currentUser.coins=data.newBalance;
     else currentUser.coins=Math.max(0,(currentUser.coins||0)-tier.cost);
-    updateCoins();renderTierCards();
-    setDeployStep(3);
-    // Show result card
+    updateCoins(); renderTierCards(); setDeployStep(3);
     const srv=data.server||{};
     document.getElementById('deploy-result-rows').innerHTML=[
-      ['Name',       srv.name||name],
-      ['Identifier', srv.id||'—'],
-      ['RAM Plan',   tier.name],
-      ['Status',     '⚙️ Installing...']
+      ['Name',srv.name||name],
+      ['Identifier',srv.id||'—'],
+      ['RAM Plan',tier.name],
+      ['Status','⚙️ Installing...']
     ].map(([k,v])=>`
       <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(34,197,94,.1)">
         <span style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">${k}</span>
@@ -1015,14 +1212,22 @@ async function doDeployServer(){
     document.getElementById('deploy-result').scrollIntoView({behavior:'smooth',block:'nearest'});
     toast('Server deployed! 🎉','success');
   }catch(e){
-    setDeployStep(1);btn.disabled=false;btn.innerHTML='&#128640; Deploy Server';
-    toast('Deployment failed — '+e.message,'error');
+    setDeployStep(1); btn.disabled=false; btn.innerHTML='&#128640; Deploy Server';
+    if(!e.message.includes('key')) toast('Deployment failed — '+e.message,'error');
   }
 }
 
-function loadAFKPage(){if(!afkRunning){document.getElementById('afk-timer').textContent='00:00:00';document.getElementById('afk-bar').style.width='0%';document.getElementById('afk-coins-estimate').textContent='0';}}
+// ── AFK ───────────────────────────────────────────────────────────────────────
+function loadAFKPage(){
+  if(!afkRunning){
+    document.getElementById('afk-timer').textContent='00:00:00';
+    document.getElementById('afk-bar').style.width='0%';
+    document.getElementById('afk-coins-estimate').textContent='0';
+    document.getElementById('afk-daily-left').textContent=afkDailyLeft;
+  }
+}
 function startAFK(){
-  afkSeconds=0;afkRunning=true;
+  afkSeconds=0; afkRunning=true;
   document.getElementById('afk-start-btn').classList.add('hidden');
   document.getElementById('afk-claim-btn').classList.remove('hidden');
   document.getElementById('afk-stop-btn').classList.remove('hidden');
@@ -1032,11 +1237,11 @@ function startAFK(){
     document.getElementById('afk-timer').textContent=`${h}:${m}:${s}`;
     const coins=Math.floor(afkSeconds*.1);
     document.getElementById('afk-coins-estimate').textContent=Math.min(coins,afkDailyLeft);
-    document.getElementById('afk-bar').style.width=Math.min((coins/afkDailyLeft)*100,100)+'%';
+    document.getElementById('afk-bar').style.width=Math.min((coins/Math.max(afkDailyLeft,1))*100,100)+'%';
   },1000);
 }
 function stopAFK(){
-  clearInterval(afkInterval);afkRunning=false;afkSeconds=0;
+  clearInterval(afkInterval); afkRunning=false; afkSeconds=0;
   document.getElementById('afk-start-btn').classList.remove('hidden');
   document.getElementById('afk-claim-btn').classList.add('hidden');
   document.getElementById('afk-stop-btn').classList.add('hidden');
@@ -1044,12 +1249,12 @@ function stopAFK(){
   document.getElementById('afk-bar').style.width='0%';
 }
 async function claimAFK(){
-  if(afkSeconds<10)return toast('Farm for at least 10 seconds','error');
-  const s=afkSeconds;stopAFK();
+  if(afkSeconds<10) return toast('Farm for at least 10 seconds','error');
+  const s=afkSeconds; stopAFK();
   try{
     const data=await api('POST','/api/afk/claim',{seconds:s});
-    if(data.error)return toast(data.error,'error');
-    currentUser.coins=data.newBalance;updateCoins();
+    if(data.error) return toast(data.error,'error');
+    currentUser.coins=data.newBalance; updateCoins();
     document.getElementById('dash-afk').textContent=data.todayEarned||0;
     afkDailyLeft=data.remaining||0;
     document.getElementById('afk-daily-left').textContent=afkDailyLeft;
@@ -1057,9 +1262,10 @@ async function claimAFK(){
   }catch(e){toast('Claim failed','error');}
 }
 
+// ── TRANSACTIONS ──────────────────────────────────────────────────────────────
 async function loadTransactions(){
   try{
-    const data=await api('GET','/api/transactions');const txs=data.transactions||[];
+    const data=await api('GET','/api/transactions'); const txs=data.transactions||[];
     document.getElementById('tx-tbody').innerHTML=txs.length===0
       ?'<tr><td colspan="4" style="text-align:center;color:var(--muted)">No transactions yet</td></tr>'
       :txs.map(t=>`<tr>
@@ -1071,9 +1277,14 @@ async function loadTransactions(){
   }catch(e){toast('Failed to load history','error');}
 }
 
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
 async function loadAdmin(){
   try{
-    const[stats,users,servers]=await Promise.all([api('GET','/api/admin/stats'),api('GET','/api/admin/users'),api('GET','/api/admin/servers')]);
+    const[stats,users,servers]=await Promise.all([
+      api('GET','/api/admin/stats'),
+      api('GET','/api/admin/users'),
+      api('GET','/api/admin/servers')
+    ]);
     document.getElementById('admin-stats').innerHTML=`
       <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value">${stats.total_users||0}</div></div>
       <div class="stat-card cyan"><div class="stat-label">Servers</div><div class="stat-value" style="color:var(--accent2)">${stats.total_servers||0}</div></div>
@@ -1083,6 +1294,7 @@ async function loadAdmin(){
       <td><div style="font-weight:700;font-size:.85rem">${u.username}</div><div style="font-size:.7rem;color:var(--muted)">${u.email}</div></td>
       <td style="font-family:var(--mono);color:var(--accent3)">${u.coins}</td>
       <td style="font-family:var(--mono);font-size:.72rem;color:${u.role==='admin'?'var(--accent)':'var(--muted)'}">${u.role}</td>
+      <td><span style="font-family:var(--mono);font-size:.65rem;color:${u.has_client_key?'var(--success)':'var(--danger)'}">${u.has_client_key?'✓ Set':'✗ Missing'}</span></td>
       <td><button class="icon-btn" onclick="adminAddCoins(${u.id},'${u.username}')">+Coins</button>
           <button class="icon-btn" style="color:var(--danger);margin-left:3px" onclick="adminToggleBan(${u.id},${u.is_banned})">${u.is_banned?'Unban':'Ban'}</button></td>
     </tr>`).join('');
@@ -1095,7 +1307,7 @@ async function loadAdmin(){
   }catch(e){toast('Failed to load admin data','error');}
 }
 
-function adminAddCoins(userId,username){
+function adminAddCoins(userId, username){
   showModal(`<div class="modal-drag"></div><h2>Add Coins &rarr; ${username}</h2>
     <div class="form-group"><label>Amount</label><input type="number" id="admin-coin-amount" value="100" min="1"></div>
     <div class="form-group"><label>Reason</label><input type="text" id="admin-coin-reason" placeholder="Admin reward"></div>
@@ -1105,26 +1317,42 @@ function adminAddCoins(userId,username){
     </div>`);
 }
 async function doAdminAddCoins(userId){
-  const amount=parseInt(document.getElementById('admin-coin-amount').value),reason=document.getElementById('admin-coin-reason').value;
-  try{const data=await api('POST',`/api/admin/users/${userId}/coins`,{amount,reason});if(data.error)toast(data.error,'error');else{toast(`Added ${amount} coins`,'success');closeModal();loadAdmin();}}
-  catch(e){toast('Failed','error');}
+  const amount=parseInt(document.getElementById('admin-coin-amount').value), reason=document.getElementById('admin-coin-reason').value;
+  try{
+    const data=await api('POST',`/api/admin/users/${userId}/coins`,{amount,reason});
+    if(data.error) toast(data.error,'error'); else{toast(`Added ${amount} coins`,'success'); closeModal(); loadAdmin();}
+  }catch(e){toast('Failed','error');}
 }
-async function adminToggleBan(userId,isBanned){
-  try{const data=await api('PUT',`/api/admin/users/${userId}`,{is_banned:!isBanned});if(data.error)toast(data.error,'error');else{toast(isBanned?'Unbanned':'Banned','success');loadAdmin();}}
-  catch(e){toast('Failed','error');}
+async function adminToggleBan(userId, isBanned){
+  try{
+    const data=await api('PUT',`/api/admin/users/${userId}`,{is_banned:!isBanned});
+    if(data.error) toast(data.error,'error'); else{toast(isBanned?'Unbanned':'Banned','success'); loadAdmin();}
+  }catch(e){toast('Failed','error');}
 }
 
-function showModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.remove('hidden');}
-function closeModal(e){if(!e||e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.add('hidden');}
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function showModal(html){
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.add('hidden');
+}
 
-window.addEventListener('DOMContentLoaded',()=>{fetch(API+'/api/health').catch(()=>{});checkSession();});
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Enter')return;
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', ()=>{
+  fetch(API+'/api/health').catch(()=>{});
+  checkSession();
+});
+
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return;
   if(!document.getElementById('auth-screen').classList.contains('hidden')){
     const isLogin=!document.getElementById('login-form').classList.contains('hidden');
-    if(isLogin)doLogin();else doRegister();
+    if(isLogin) doLogin(); else doRegister();
   }
-  if(document.activeElement?.id==='console-cmd')sendConsoleCmd();
+  if(document.activeElement?.id==='console-cmd') sendConsoleCmd();
 });
 </script>
 </body>
