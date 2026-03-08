@@ -1053,17 +1053,48 @@ function switchAuth(tab, btn) {
   document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
 }
 
+async function apiWithWake(method, path, body) {
+  // Try up to 4 times over 60s to handle Render cold starts
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      const opts = {
+        method,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
+      };
+      if (body) opts.body = JSON.stringify(body);
+      const res = await fetch(API + path, opts);
+      clearTimeout(timeout);
+      return await res.json();
+    } catch(e) {
+      if (attempt < 4) {
+        toast(`Server waking up... retrying (${attempt}/3)`, 'info');
+        await new Promise(r => setTimeout(r, 8000));
+      } else {
+        throw e;
+      }
+    }
+  }
+}
+
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value;
   if (!email || !password) return toast('Fill in all fields', 'error');
+  const btn = document.querySelector('#login-form .btn');
+  btn.disabled = true; btn.textContent = 'Connecting...';
   try {
-    const data = await api('POST', '/api/auth/login', { email, password });
-    if (data.error) return toast(data.error, 'error');
+    const data = await apiWithWake('POST', '/api/auth/login', { email, password });
+    if (data.error) { toast(data.error, 'error'); return; }
     currentUser = data.user;
     enterApp();
   } catch(e) {
-    toast('Connection error — is the server awake? (Render cold starts take ~30s)', 'error');
+    toast('Could not reach server. Check your internet or try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '&rarr; Login';
   }
 }
 
@@ -1072,14 +1103,18 @@ async function doRegister() {
   const email = document.getElementById('reg-email').value.trim();
   const password = document.getElementById('reg-pass').value;
   if (!username || !email || !password) return toast('Fill in all fields', 'error');
+  const btn = document.querySelector('#register-form .btn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
   try {
-    const data = await api('POST', '/api/auth/register', { username, email, password });
-    if (data.error) return toast(data.error, 'error');
+    const data = await apiWithWake('POST', '/api/auth/register', { username, email, password });
+    if (data.error) { toast(data.error, 'error'); return; }
     toast('Account created! Please login.', 'success');
     const loginTab = document.querySelector('.auth-tab');
     switchAuth('login', loginTab);
   } catch(e) {
-    toast('Connection error — server may be waking up, try again in 30s', 'error');
+    toast('Could not reach server. Check your internet or try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '&rarr; Create Account';
   }
 }
 
@@ -1615,7 +1650,11 @@ function closeModal(e) {
 // ─────────────────────────────────────────
 // BOOT
 // ─────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', checkSession);
+window.addEventListener('DOMContentLoaded', () => {
+  // Ping server immediately to wake Render before user clicks login
+  fetch(API + '/api/health', { method: 'GET' }).catch(() => {});
+  checkSession();
+});
 
 // Allow Enter key in auth
 document.addEventListener('keydown', e => {
