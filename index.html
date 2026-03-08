@@ -545,26 +545,44 @@ const API='https://drex-panel.onrender.com';
 let currentUser=null,currentServerId=null,currentFilePath='/',consoleWs=null;
 let afkInterval=null,afkSeconds=0,afkRunning=false,afkDailyLeft=500,moreOpen=false;
 
+function getToken(){ return localStorage.getItem('dp_token'); }
+function setToken(t){ localStorage.setItem('dp_token',t); }
+function clearToken(){ localStorage.removeItem('dp_token'); }
+
+function authHeaders(){
+  const t=getToken();
+  return t ? {'Content-Type':'application/json','Authorization':'Bearer '+t}
+           : {'Content-Type':'application/json'};
+}
+
 async function api(method,path,body){
-  const opts={method,credentials:'include',mode:'cors',headers:{'Content-Type':'application/json'}};
+  const opts={method,headers:authHeaders()};
   if(body)opts.body=JSON.stringify(body);
   const res=await fetch(API+path,opts);
-  if(!res.ok&&![400,401,403].includes(res.status))throw new Error(`HTTP ${res.status}`);
+  if(res.status===401){clearToken();currentUser=null;showAuth();throw new Error('Session expired');}
+  if(!res.ok&&![400,403].includes(res.status))throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
 async function apiWithWake(method,path,body){
   for(let a=1;a<=4;a++){
     try{
       const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),25000);
-      const opts={method,credentials:'include',mode:'cors',headers:{'Content-Type':'application/json'},signal:ctrl.signal};
+      const opts={method,headers:authHeaders(),signal:ctrl.signal};
       if(body)opts.body=JSON.stringify(body);
-      const res=await fetch(API+path,opts);clearTimeout(t);return await res.json();
+      const res=await fetch(API+path,opts);clearTimeout(t);
+      if(res.status===401){clearToken();currentUser=null;showAuth();throw new Error('Session expired');}
+      return await res.json();
     }catch(e){
+      if(e.message==='Session expired')throw e;
       if(e.message?.toLowerCase().includes('cors'))throw new Error('CORS_ERROR');
       if(a<4){toast(`Server waking up... (${a}/3)`,'info');await new Promise(r=>setTimeout(r,8000));}
       else throw e;
     }
   }
+}
+function showAuth(){
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('app').classList.add('hidden');
 }
 function toast(msg,type='info'){
   const icons={success:'&#10003;',error:'&#x2715;',info:'i'};
@@ -594,6 +612,7 @@ async function doLogin(){
   try{
     const data=await apiWithWake('POST','/api/auth/login',{email,password});
     if(data.error){toast(data.error,'error');return;}
+    if(data.token)setToken(data.token);
     currentUser=data.user;enterApp();
   }catch(e){toast(e.message==='CORS_ERROR'?'CORS error — check FRONTEND_URL on Render':'Could not reach server, try again','error');}
   finally{btn.disabled=false;btn.innerHTML='&rarr; Login';}
@@ -605,18 +624,22 @@ async function doRegister(){
   try{
     const data=await apiWithWake('POST','/api/auth/register',{username,email,password});
     if(data.error){toast(data.error,'error');return;}
-    toast('Account created! Please login.','success');
-    switchAuth('login',document.querySelector('.auth-tab'));
+    if(data.token)setToken(data.token);
+    currentUser=data.user;enterApp();
+    toast('Account created! Welcome \u{1F389}','success');
   }catch(e){toast(e.message==='CORS_ERROR'?'CORS error — check FRONTEND_URL':'Could not reach server, try again','error');}
   finally{btn.disabled=false;btn.innerHTML='&rarr; Create Account';}
 }
 async function doLogout(){
-  await api('POST','/api/auth/logout').catch(()=>{});
+  clearToken();
   currentUser=null;
-  document.getElementById('auth-screen').classList.remove('hidden');
-  document.getElementById('app').classList.add('hidden');
+  showAuth();
 }
-async function checkSession(){try{const d=await api('GET','/api/auth/me');if(d.user){currentUser=d.user;enterApp();}}catch(e){}}
+async function checkSession(){
+  if(!getToken())return;
+  try{const d=await api('GET','/api/auth/me');if(d.user){currentUser=d.user;enterApp();}}
+  catch(e){clearToken();}
+}
 
 function updateCoins(v){
   const val=v??currentUser?.coins??0;
@@ -799,7 +822,8 @@ async function deleteFile(name){
 async function uploadFile(input){
   const file=input.files[0];if(!file)return;
   const fd=new FormData();fd.append('file',file);
-  const res=await fetch(`${API}/api/servers/${currentServerId}/files/upload?directory=${encodeURIComponent(currentFilePath)}`,{method:'POST',credentials:'include',body:fd});
+  const t=getToken();
+  const res=await fetch(`${API}/api/servers/${currentServerId}/files/upload?directory=${encodeURIComponent(currentFilePath)}`,{method:'POST',headers:t?{'Authorization':'Bearer '+t}:{},body:fd});
   const data=await res.json();
   if(data.error)toast(data.error,'error');else{toast('Uploaded!','success');loadFiles();}
 }
