@@ -764,12 +764,6 @@ function connectConsole() {
   if (consoleWs) { try{consoleWs.close();}catch{} consoleWs=null; consoleAuthToken=null; }
   document.getElementById('console-output').innerHTML = '';
 
-  if (!currentUser.has_client_key) {
-    appendConsole('⚠ Client API key not set.', 'error');
-    appendConsole('Go to Settings → API Key and paste your ptlc_ key.', 'warn');
-    return;
-  }
-
   appendConsole('Connecting...', 'info');
 
   api('GET', `/api/servers/${currentServerId}/console`).then(data => {
