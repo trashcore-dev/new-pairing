@@ -749,7 +749,7 @@ function switchServerTab(tab, btn) {
   if (tab==='info')  loadServerInfo();
 }
 
-// ── Console — connects DIRECTLY to Pterodactyl WebSocket ──────────────────────
+// ── Console — connects via backend relay (bypasses CORS) ─────────────────────
 function connectConsole() {
   if (consoleWs) { try{consoleWs.close();}catch{} consoleWs=null; consoleAuthToken=null; }
   document.getElementById('console-output').innerHTML = '';
@@ -766,21 +766,23 @@ function connectConsole() {
     if (data.error) { appendConsole('Error: ' + data.error, 'error'); return; }
     if (!data.socket || !data.token) { appendConsole('Invalid credentials from panel.', 'error'); return; }
 
-    consoleAuthToken = data.token;
+    // ── Connect via backend relay — avoids CORS issues ────────────────────────
+    // Backend relay URL: wss://your-backend/ws?socket=...&token=...
+    const backendWsUrl = API.replace(/^http/, 'ws')
+      + '/ws?socket=' + encodeURIComponent(data.socket)
+      + '&token='     + encodeURIComponent(data.token);
 
-    // ── Connect DIRECTLY to Pterodactyl — no backend relay ────────────────────
-    consoleWs = new WebSocket(data.socket);
+    consoleWs = new WebSocket(backendWsUrl);
 
     consoleWs.onopen = () => {
-      // Auth MUST be sent immediately on open — Pterodactyl closes if delayed
-      consoleWs.send(JSON.stringify({ event: 'auth', args: [consoleAuthToken] }));
+      appendConsole('Connected ✓', 'success');
     };
 
     consoleWs.onmessage = e => {
       try {
         const m = JSON.parse(e.data);
         if (m.event === 'auth success') {
-          appendConsole('Connected ✓', 'success');
+          // relay already authed — nothing to do
         } else if (m.event === 'console output' && m.args) {
           m.args.forEach(l => appendConsole(l));
         } else if (m.event === 'status') {
@@ -788,26 +790,26 @@ function connectConsole() {
         } else if (m.event === 'stats') {
           // silently ignore stats packets
         } else if (m.event === 'token expiring') {
-          // Pterodactyl warns ~60s before token expires — refresh it
+          // Fetch fresh credentials and reconnect relay with new token
           api('GET', `/api/servers/${currentServerId}/console`).then(fresh => {
-            if (fresh.token && consoleWs?.readyState === WebSocket.OPEN) {
-              consoleAuthToken = fresh.token;
-              consoleWs.send(JSON.stringify({ event: 'auth', args: [consoleAuthToken] }));
+            if (fresh.socket && fresh.token) {
+              appendConsole('Refreshing connection...', 'info');
+              connectConsole();
             }
-          }).catch(() => appendConsole('Token refresh failed','warn'));
+          }).catch(() => appendConsole('Token refresh failed', 'warn'));
+        } else if (m.event === 'error') {
+          appendConsole('Panel error: ' + (m.error||'unknown'), 'error');
         }
       } catch { appendConsole(e.data); }
     };
 
     consoleWs.onerror = () => {
-      appendConsole('WebSocket error.', 'error');
-      appendConsole('If this keeps happening, check that your panel allows connections from this domain.', 'warn');
+      appendConsole('WebSocket error — could not reach backend relay.', 'error');
     };
 
     consoleWs.onclose = e => {
-      const reasons = { 1000:'Normal close', 1001:'Server going away', 1006:'Abnormal close (CORS/auth)', 1008:'Policy violation (bad token)', 1011:'Server error' };
+      const reasons = { 1000:'Normal close', 1001:'Server going away', 1006:'Abnormal close', 1008:'Policy violation', 1011:'Server error' };
       appendConsole(`Disconnected — ${reasons[e.code]||'code '+e.code}`, 'warn');
-      if (e.code === 1006) appendConsole('Code 1006 usually means CORS is blocking your domain. Add your frontend URL to your panel CORS config.', 'error');
       consoleWs = null;
     };
 
