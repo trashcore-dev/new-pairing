@@ -714,6 +714,7 @@ function serverCard(s){
       <button class="btn btn-success"  onclick="quickPower('${s.server_id}','start')">&#9654; Start</button>
       <button class="btn btn-danger"   onclick="quickPower('${s.server_id}','stop')">&#9632; Stop</button>
       <button class="btn btn-warning"  onclick="quickPower('${s.server_id}','restart')">&#8634; Restart</button>
+      <button class="btn btn-secondary" onclick="deleteServer('${s.server_id}','${s.server_name}')">&#128465;</button>
     </div></div>`;
 }
 async function loadServers() {
@@ -725,6 +726,15 @@ async function loadServers() {
       : servers.map(serverCard).join('');
   } catch(e){document.getElementById('servers-grid').innerHTML='<div class="empty-state"><p style="color:var(--danger)">Failed to load</p></div>';}
 }
+async function deleteServer(id, name) {
+  if (!confirm(`Remove "${name}" from DrexPanel?\n\nThis only removes it from your list — the server on Pterodactyl is NOT deleted.`)) return;
+  try {
+    const d = await api('DELETE', `/api/servers/${id}`);
+    if (d.error) toast(d.error, 'error');
+    else { toast(`${name} removed`, 'success'); loadServers(); loadDashboard(); }
+  } catch(e) { toast('Failed to remove server', 'error'); }
+}
+
 async function quickPower(id, action) {
   try { const d=await api('POST',`/api/servers/${id}/power`,{action}); if(d.error)toast(d.error,'error'); else{toast(`${action} sent`,'success');loadServers();} }
   catch(e){if(e.message!=='needs_client_key')toast('Network error','error');}
